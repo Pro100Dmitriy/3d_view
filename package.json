@@ -1,0 +1,26 @@
+{
+  "name": "3d",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "parcel index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Pro100Dmitriy/3d_view.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Pro100Dmitriy/3d_view/issues"
+  },
+  "homepage": "https://github.com/Pro100Dmitriy/3d_view#readme",
+  "dependencies": {
+    "three": "^0.133.1"
+  },
+  "devDependencies": {
+    "sass": "^1.42.1"
+  }
+}
