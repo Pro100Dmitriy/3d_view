@@ -50193,7 +50193,9 @@ var Constructor = /*#__PURE__*/function () {
 
     this.scene = scene;
     this.world = world;
-  }
+  } // Lights
+  // Meshes
+
 
   _createClass(Constructor, [{
     key: "createCube",
@@ -50221,6 +50223,12 @@ var Constructor = /*#__PURE__*/function () {
       this.world.addBody(cubeBody);
       return [cubeMesh, cubeBody];
     }
+  }, {
+    key: "addFBXObject",
+    value: function addFBXObject() {}
+  }, {
+    key: "addOBGOject",
+    value: function addOBGOject() {}
   }]);
 
   return Constructor;
@@ -50290,7 +50298,9 @@ var Envoirement = /*#__PURE__*/function () {
     key: "meshes",
     value: function meshes() {
       this.meshesArr.push(this.constructor.createCube([1, 1, 1], [10, 10, 3], 1));
-      this.meshesArr.push(this.constructor.createCube([1, 1, 1], [0, 10, 0], 1)); // Borders
+      this.meshesArr.push(this.constructor.createCube([1, 1, 1], [0, 10, 0], 1));
+      this.meshesArr.push(this.constructor.createCube([1, 1, 1], [0, 10, 20], 1));
+      this.meshesArr.push(this.constructor.createCube([1, 1, 1], [50, 10, 20], 1)); // Borders
 
       this.border1 = this.constructor.createCube([70, 20, 5], [-3.673, 0.994, -4], 0);
       return this.meshesArr;
@@ -51514,13 +51524,21 @@ var GameShop = /*#__PURE__*/function () {
   }, {
     key: "initTHREE",
     value: function initTHREE() {
+      // camera
       this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 50000);
       this.camera.position.x = 10;
       this.camera.position.y = 10;
-      this.camera.position.z = 10;
+      this.camera.position.z = 10; // scene
+
       this.scene = new THREE.Scene();
       this.scene.fog = new THREE.Fog(0x000000, 0, 500);
-      this.scene.add(new THREE.AxesHelper(5)); // envoirement
+      this.scene.add(new THREE.AxesHelper(5)); // raycaster
+
+      this.raycaster = new THREE.Raycaster();
+      this.raymouse = new THREE.Vector3();
+      this.raymouse.x = window.innerWidth / 2 / window.innerWidth * 2 - 1;
+      this.raymouse.y = -(window.innerHeight / 2 / window.innerHeight) * 2 + 1;
+      this.raymouse.z = -(window.innerHeight / 2 / window.innerHeight) * 2 + 1; // envoirement
 
       var envoirement = new _Envoirement.Envoirement(this.scene, this.world); // light
 
@@ -51563,6 +51581,18 @@ var GameShop = /*#__PURE__*/function () {
       this.renderer.setSize(window.innerWidth, window.innerHeight);
     }
   }, {
+    key: "raycasterFun",
+    value: function raycasterFun() {
+      this.raycaster.setFromCamera(this.raymouse, this.camera);
+      var intersects = this.raycaster.intersectObjects(this.scene.children); // for ( let i = 0; i < intersects.length; i ++ ) {
+      //     intersects[ i ].object.material.color.set( 0xff0000 );
+      // }
+
+      if (intersects[intersects.length - 1]) {
+        console.log(intersects[intersects.length - 1]); //this.infopage.innerHTML = intersects[intersects.length-1].object.name
+      }
+    }
+  }, {
     key: "updater",
     value: function updater() {
       this.world.step(1 / 60); //this.delta = Math.min(this.clock.getDelta(), 0.1)
@@ -51577,6 +51607,7 @@ var GameShop = /*#__PURE__*/function () {
   }, {
     key: "render",
     value: function render() {
+      this.raycasterFun();
       this.renderer.render(this.scene, this.camera);
     }
   }]);
@@ -51655,7 +51686,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60024" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53170" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

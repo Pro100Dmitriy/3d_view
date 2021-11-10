@@ -62,14 +62,23 @@ export class GameShop{
      * THREE
      */
     initTHREE(){
+        // camera
         this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 50000)
         this.camera.position.x = 10
         this.camera.position.y = 10
         this.camera.position.z = 10
         
+        // scene
         this.scene = new THREE.Scene()
         this.scene.fog = new THREE.Fog( 0x000000, 0, 500 )
         this.scene.add(new THREE.AxesHelper(5))
+
+        // raycaster
+        this.raycaster = new THREE.Raycaster();
+        this.raymouse = new THREE.Vector3();
+        this.raymouse.x = ( (window.innerWidth / 2) / window.innerWidth ) * 2 - 1
+        this.raymouse.y = - ( (window.innerHeight / 2) / window.innerHeight ) * 2 + 1
+        this.raymouse.z = - ( (window.innerHeight / 2) / window.innerHeight ) * 2 + 1
 
         // envoirement
         const envoirement = new Envoirement( this.scene, this.world )
@@ -113,6 +122,19 @@ export class GameShop{
         this.renderer.setSize( window.innerWidth, window.innerHeight )
     }
 
+    raycasterFun(){
+        this.raycaster.setFromCamera( this.raymouse, this.camera )
+        const intersects = this.raycaster.intersectObjects( this.scene.children )
+
+        // for ( let i = 0; i < intersects.length; i ++ ) {
+        //     intersects[ i ].object.material.color.set( 0xff0000 );
+        // }
+        if(intersects[intersects.length-1]){
+            console.log( intersects[intersects.length-1] )
+            //this.infopage.innerHTML = intersects[intersects.length-1].object.name
+        }
+    }
+
     updater(){
         this.world.step(1/60)
 
@@ -136,6 +158,7 @@ export class GameShop{
     }
 
     render(){
+        this.raycasterFun()
         this.renderer.render(this.scene, this.camera)
     }
 }

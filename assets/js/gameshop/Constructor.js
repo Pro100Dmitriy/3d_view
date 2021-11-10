@@ -7,6 +7,9 @@ export class Constructor{
         this.world = world
     }
 
+    // Lights
+
+    // Meshes
     createCube( scale, position, mass ){
         const geometry = new THREE.BoxGeometry( ...scale );
         const material = new THREE.MeshBasicMaterial( {color: 0xe5e5e5, } );
@@ -25,5 +28,13 @@ export class Constructor{
         cubeBody.position.z = cubeMesh.position.z
         this.world.addBody(cubeBody)
         return [cubeMesh, cubeBody]
+    }
+
+    addFBXObject(){
+
+    }
+
+    addOBGOject(){
+
     }
 }

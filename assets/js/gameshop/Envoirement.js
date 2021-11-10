@@ -41,6 +41,8 @@ export class Envoirement{
     meshes(){
         this.meshesArr.push( this.constructor.createCube([1,1,1], [10,10,3], 1) )
         this.meshesArr.push( this.constructor.createCube([1,1,1], [0,10,0], 1) )
+        this.meshesArr.push( this.constructor.createCube([1,1,1], [0,10,20], 1) )
+        this.meshesArr.push( this.constructor.createCube([1,1,1], [50,10,20], 1) )
 
         // Borders
         this.border1 = this.constructor.createCube([70,20,5], [-3.673, 0.994, -4], 0)
