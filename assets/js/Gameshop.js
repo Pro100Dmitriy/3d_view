@@ -454,11 +454,11 @@ export class Gameshop{
         // this.shop = this.addFbxModel('edges.fbx', {x: 0, y: 0, z: 50}, 10)
         this.cube1 = this.createCube([1,1,1], [10,10,3], 1)
         this.cube2 = this.createCube([1,1,1], [0,10,0], 1)
-        this.addFbxModel('hoodie.fbx', {x: 10, y: 10, z: 0}, 10, [1,1,1])
+        //this.addFbxModel('hoodie.fbx', {x: 10, y: 10, z: 0}, 10, [1,1,1])
 
-        const material = new THREE.MeshLambertMaterial()
-        const texture = new THREE.TextureLoader().load("img/01_Hoodie_model_lambert1_BaseColor.png")
-        this.addFbxModel('hoodie_test.fbx', {x: 5, y: 10, z: 10}, .05, [1,1,1], material, texture)
+        //const material = new THREE.MeshLambertMaterial()
+        //const texture = new THREE.TextureLoader().load("img/01_Hoodie_model_lambert1_BaseColor.png")
+        //this.addFbxModel('hoodie_test.fbx', {x: 5, y: 10, z: 10}, .05, [1,1,1], material, texture)
 
         // Borders
         this.border1 = this.createCube([70,20,5], [-3.673, 0.994, -4], 0)
