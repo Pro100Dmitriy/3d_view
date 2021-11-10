@@ -73,18 +73,12 @@ export class GameShop{
         this.scene.fog = new THREE.Fog( 0x000000, 0, 500 )
         this.scene.add(new THREE.AxesHelper(5))
 
-        // raycaster
-        this.raycaster = new THREE.Raycaster();
-        this.raymouse = new THREE.Vector3();
-        this.raymouse.x = ( (window.innerWidth / 2) / window.innerWidth ) * 2 - 1
-        this.raymouse.y = - ( (window.innerHeight / 2) / window.innerHeight ) * 2 + 1
-        this.raymouse.z = - ( (window.innerHeight / 2) / window.innerHeight ) * 2 + 1
-
         // envoirement
         const envoirement = new Envoirement( this.scene, this.world )
 
         // light
-        envoirement.lights()
+        //envoirement.lights()
+        envoirement.illuminate()
 
         // floor
         const floorGeometry = new THREE.PlaneGeometry( 300, 300, 50, 50 )
@@ -104,10 +98,14 @@ export class GameShop{
         this.container.appendChild( this.renderer.domElement )
 
         // meshes
-        this.meshesArr = envoirement.meshes()
+        envoirement.build()
+        this.combineArr = envoirement.getCombineArr
+        this.meshesArr = envoirement.getMeshesArr
+        this.bodysArr = envoirement.getBodyArr
+        this.pickedObject = envoirement.getPickedObject
 
         // controls
-        this.controls = new Controll( 'edit', this.scene, this.renderer, this.camera, this.sphereBody, this.container )
+        this.controls = new Controll( 'edit', this.scene, this.renderer, this.camera, this.sphereBody, this.container, this.pickedObject )
 
         /** Other Events */
         window.addEventListener( 'resize', this.onWindowResize.bind(this), false );
@@ -122,27 +120,12 @@ export class GameShop{
         this.renderer.setSize( window.innerWidth, window.innerHeight )
     }
 
-    raycasterFun(){
-        this.raycaster.setFromCamera( this.raymouse, this.camera )
-        const intersects = this.raycaster.intersectObjects( this.scene.children )
-
-        // for ( let i = 0; i < intersects.length; i ++ ) {
-        //     intersects[ i ].object.material.color.set( 0xff0000 );
-        // }
-        if(intersects[intersects.length-1]){
-            console.log( intersects[intersects.length-1] )
-            //this.infopage.innerHTML = intersects[intersects.length-1].object.name
-        }
-    }
-
     updater(){
+        this.controls.update()
         this.world.step(1/60)
 
-        //this.delta = Math.min(this.clock.getDelta(), 0.1)
-        //this.world.step(this.delta)
-
         this.cannonDebugRenderer.update()
-        this.meshesArr.forEach( item => {
+        this.combineArr.forEach( item => {
             item[0].position.set(
                 item[1].position.x,
                 item[1].position.y,
@@ -158,7 +141,6 @@ export class GameShop{
     }
 
     render(){
-        this.raycasterFun()
         this.renderer.render(this.scene, this.camera)
     }
 }
