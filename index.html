@@ -7,8 +7,29 @@
     <title>3D View</title>
 </head>
 <body>
-
+    
+    <span class="snap"></span>
     <div id="gameshop"></div>
+    <div id="gameshop_info" class="gameshop_info">
+        <div class="relative">
+            <div class="gameshop_info__buttons">
+                <button id="toggle_info" class="toggle_info"></button>
+            </div>
+            <div class="gameshop_info__content">
+                <ul class="game_settings">
+                    <li class="gamemode">
+                        <select name="text" id="gamemode">
+                            <option>Custom</option>
+                            <option>Single</option>
+                        </select>
+                    </li>
+                    <li id="object_properties" class="properties">
+
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
     
     <button id="open_gameshop" class="gameopen">Виртуальный магазин</button>
 
