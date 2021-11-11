@@ -57888,13 +57888,13 @@ class MapControls extends OrbitControls {
 }
 
 exports.MapControls = MapControls;
-},{"three":"node_modules/three/build/three.module.js"}],"assets/js/gameshop/Controll.js":[function(require,module,exports) {
+},{"three":"node_modules/three/build/three.module.js"}],"assets/js/gameshop/Controllers/classes/Editmode.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Controll = void 0;
+exports.Editmode = void 0;
 
 var THREE = _interopRequireWildcard(require("three"));
 
@@ -57912,34 +57912,43 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var Controll = /*#__PURE__*/function () {
-  function Controll(type, scene, renderer, camera, sphereBody, container, meshesArr) {
-    _classCallCheck(this, Controll);
+var Editmode = /*#__PURE__*/function () {
+  function Editmode(_ref) {
+    var scene = _ref.scene,
+        renderer = _ref.renderer,
+        camera = _ref.camera,
+        container = _ref.container,
+        meshesArr = _ref.meshesArr;
+
+    _classCallCheck(this, Editmode);
 
     this.scene = scene;
     this.renderer = renderer;
     this.camera = camera;
-    this.sphereBody = sphereBody;
     this.container = container;
     this.pickableObjects = meshesArr;
-    var controls;
-
-    switch (type) {
-      case 'edit':
-        return this.editmode();
-
-      case 'game':
-        return this.gamemode();
-
-      default:
-        return this.editmode();
-    }
+    this.create();
   }
 
-  _createClass(Controll, [{
-    key: "editmode",
-    value: function editmode() {
+  _createClass(Editmode, [{
+    key: "create",
+    value: function create() {
       var controls = new _OrbitControls.OrbitControls(this.camera, this.renderer.domElement);
+
+      controls.utils = function () {};
+
+      this.raycaster();
+      this.controls = controls;
+      return this;
+    }
+  }, {
+    key: "getControls",
+    get: function get() {
+      return this.controls;
+    }
+  }, {
+    key: "raycaster",
+    value: function raycaster() {
       var raycaster = new THREE.Raycaster();
       var intersects;
       var intersectedObject = [];
@@ -57978,25 +57987,105 @@ var Controll = /*#__PURE__*/function () {
           }
         });
       }
-
-      return controls;
-    }
-  }, {
-    key: "gamemode",
-    value: function gamemode() {
-      this.container.addEventListener('click', function (event) {
-        return document.body.requestPointerLock();
-      });
-      var controls = new PointerLockControls(this.camera, this.sphereBody);
-      this.scene.add(controls.getObject());
-      return controls;
     }
   }]);
 
-  return Controll;
+  return Editmode;
+}();
+/** Modules */
+
+
+exports.Editmode = Editmode;
+
+var viewInformation = function viewInformation() {
+  var pointofview = document.querySelector('#view-info');
+  return {
+    open: function open(name) {
+      pointofview.innerHTML = "<p>".concat(name, "</p>");
+    }
+  };
+};
+},{"three":"node_modules/three/build/three.module.js","cannon-es":"node_modules/cannon-es/dist/cannon-es.js","three/examples/jsm/controls/OrbitControls":"node_modules/three/examples/jsm/controls/OrbitControls.js"}],"assets/js/gameshop/Controllers/classes/Gamemode.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Gamemode = void 0;
+
+var THREE = _interopRequireWildcard(require("three"));
+
+var CANNON = _interopRequireWildcard(require("cannon-es"));
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Gamemode = /*#__PURE__*/function () {
+  function Gamemode(_ref) {
+    var scene = _ref.scene,
+        renderer = _ref.renderer,
+        camera = _ref.camera,
+        world = _ref.world,
+        container = _ref.container;
+
+    _classCallCheck(this, Gamemode);
+
+    this.scene = scene;
+    this.renderer = renderer;
+    this.camera = camera;
+    this.container = container;
+    this.world = world;
+    this.addSphere();
+    this.create();
+  }
+
+  _createClass(Gamemode, [{
+    key: "create",
+    value: function create() {
+      this.container.addEventListener('click', function (event) {
+        return document.body.requestPointerLock();
+      });
+      this.camera.position.x = this.sphereBody.position.x;
+      this.camera.position.y = this.sphereBody.position.y;
+      this.camera.position.z = this.sphereBody.position.z;
+      var controls = new PointerLockControls(this.camera, this.sphereBody);
+      this.scene.add(controls.getObject());
+      this.controls = controls;
+      return this;
+    }
+  }, {
+    key: "addSphere",
+    value: function addSphere() {
+      // Create a sphere
+      var mass = 3,
+          radius = 5;
+      this.sphereShape = new CANNON.Sphere(radius);
+      this.sphereBody = new CANNON.Body({
+        mass: mass
+      });
+      this.sphereBody.addShape(this.sphereShape);
+      this.sphereBody.position.set(0, 25, 0);
+      this.sphereBody.linearDamping = .5;
+      this.world.addBody(this.sphereBody);
+    }
+  }, {
+    key: "getControls",
+    get: function get() {
+      return this.controls;
+    }
+  }]);
+
+  return Gamemode;
 }();
 
-exports.Controll = Controll;
+exports.Gamemode = Gamemode;
 
 var PointerLockControls = function PointerLockControls(camera, cannonBody) {
   var eyeYPos = 2; // eyes are 2 meters above the ground
@@ -58165,17 +58254,86 @@ var PointerLockControls = function PointerLockControls(camera, cannonBody) {
     velocity.z += inputVelocity.z;
     yawObject.position.copy(cannonBody.position);
   };
+
+  this.utils = function () {
+    camera.position.y = 1;
+  };
+};
+},{"three":"node_modules/three/build/three.module.js","cannon-es":"node_modules/cannon-es/dist/cannon-es.js"}],"assets/js/gameshop/Controllers/Controll.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Controll = void 0;
+
+var _Editmode = require("./classes/Editmode");
+
+var _Gamemode = require("./classes/Gamemode");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Controll = function Controll(type, scene, renderer, camera, world, container, meshesArr) {
+  _classCallCheck(this, Controll);
+
+  switch (type) {
+    case 'edit':
+      return new _Editmode.Editmode({
+        scene: scene,
+        renderer: renderer,
+        camera: camera,
+        container: container,
+        meshesArr: meshesArr
+      }).getControls;
+
+    case 'game':
+      return new _Gamemode.Gamemode({
+        scene: scene,
+        renderer: renderer,
+        camera: camera,
+        world: world,
+        container: container
+      }).getControls;
+
+    default:
+      return new _Editmode.Editmode({
+        scene: scene,
+        renderer: renderer,
+        camera: camera,
+        container: container,
+        meshesArr: meshesArr
+      }).getControls;
+  }
 };
 
-var viewInformation = function viewInformation() {
-  var pointofview = document.querySelector('#view-info');
+exports.Controll = Controll;
+},{"./classes/Editmode":"assets/js/gameshop/Controllers/classes/Editmode.js","./classes/Gamemode":"assets/js/gameshop/Controllers/classes/Gamemode.js"}],"assets/js/gameshop/Modules/PauseModule.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.pause = void 0;
+
+var pause = function pause() {
+  var pointofview = document.querySelector('#pause');
   return {
-    open: function open(name) {
-      pointofview.innerHTML = "<p>".concat(name, "</p>");
+    func: null,
+    open: function open(request, func) {
+      this.func = func;
+      pointofview.style.display = 'block';
+      window.cancelAnimationFrame(request);
+      pointofview.addEventListener('click', this.close);
+    },
+    close: function close() {
+      pointofview.style.display = 'none';
+      return requestAnimationFrame(this.func);
     }
   };
 };
-},{"three":"node_modules/three/build/three.module.js","cannon-es":"node_modules/cannon-es/dist/cannon-es.js","three/examples/jsm/controls/OrbitControls":"node_modules/three/examples/jsm/controls/OrbitControls.js"}],"assets/js/gameshop/game.js":[function(require,module,exports) {
+
+exports.pause = pause;
+},{}],"assets/js/gameshop/game.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -58191,7 +58349,9 @@ var _cannonDebugRenderer = _interopRequireDefault(require("../utils/cannonDebugR
 
 var _Envoirement = require("./Envoirement");
 
-var _Controll = require("./Controll");
+var _Controll = require("./Controllers/Controll");
+
+var _PauseModule = require("./Modules/PauseModule");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -58213,12 +58373,14 @@ var GameShop = /*#__PURE__*/function () {
 
     _classCallCheck(this, GameShop);
 
-    this.container = container;
+    this.container = container; // Modules
+
+    this.pauseModule = (0, _PauseModule.pause)();
     this.initCANNON();
     this.initTHREE();
 
     var loop = function loop() {
-      requestAnimationFrame(loop);
+      _this.request = requestAnimationFrame(loop);
 
       _this.updater();
 
@@ -58226,6 +58388,13 @@ var GameShop = /*#__PURE__*/function () {
     };
 
     loop();
+    window.addEventListener('keydown', onKeyDown.bind(this), false);
+
+    function onKeyDown(event) {
+      if (event.code === 'Escape') {
+        this.pauseModule.open(this.request, loop);
+      }
+    }
   }
   /**
    * CANNON
@@ -58246,18 +58415,7 @@ var GameShop = /*#__PURE__*/function () {
       solver.tolerance = 0.1;
       this.world.solver = new CANNON.SplitSolver(solver);
       this.world.gravity.set(0, -20, 0);
-      this.world.broadphase = new CANNON.NaiveBroadphase(); // Create a sphere
-
-      var mass = 3,
-          radius = 5;
-      this.sphereShape = new CANNON.Sphere(radius);
-      this.sphereBody = new CANNON.Body({
-        mass: mass
-      }); //this.sphereBody.addShape(this.sphereShape)
-
-      this.sphereBody.position.set(0, 25, 0);
-      this.sphereBody.linearDamping = .5; //this.world.addBody(this.sphereBody)
-      // Create a plane
+      this.world.broadphase = new CANNON.NaiveBroadphase(); // Create a plane
 
       this.groundShape = new CANNON.Plane();
       this.groundBody = new CANNON.Body({
@@ -58315,7 +58473,7 @@ var GameShop = /*#__PURE__*/function () {
       this.bodysArr = envoirement.getBodyArr;
       this.pickedObject = envoirement.getPickedObject; // controls
 
-      this.controls = new _Controll.Controll('edit', this.scene, this.renderer, this.camera, this.sphereBody, this.container, this.pickedObject);
+      this.controls = new _Controll.Controll('game', this.scene, this.renderer, this.camera, this.world, this.container, this.pickedObject);
       /** Other Events */
 
       window.addEventListener('resize', this.onWindowResize.bind(this), false); // debug
@@ -58332,8 +58490,9 @@ var GameShop = /*#__PURE__*/function () {
   }, {
     key: "updater",
     value: function updater() {
-      this.controls.update();
       this.world.step(1 / 60);
+      this.controls.update(Date.now() - this.time);
+      this.controls.utils();
       this.cannonDebugRenderer.update();
       this.combineArr.forEach(function (item) {
         item[0].position.set(item[1].position.x, item[1].position.y, item[1].position.z);
@@ -58344,6 +58503,7 @@ var GameShop = /*#__PURE__*/function () {
     key: "render",
     value: function render() {
       this.renderer.render(this.scene, this.camera);
+      this.time = Date.now();
     }
   }]);
 
@@ -58351,7 +58511,7 @@ var GameShop = /*#__PURE__*/function () {
 }();
 
 exports.GameShop = GameShop;
-},{"three":"node_modules/three/build/three.module.js","cannon-es":"node_modules/cannon-es/dist/cannon-es.js","../utils/cannonDebugRenderer":"assets/js/utils/cannonDebugRenderer.ts","./Envoirement":"assets/js/gameshop/Envoirement.js","./Controll":"assets/js/gameshop/Controll.js"}],"assets/js/gameshop/model.js":[function(require,module,exports) {
+},{"three":"node_modules/three/build/three.module.js","cannon-es":"node_modules/cannon-es/dist/cannon-es.js","../utils/cannonDebugRenderer":"assets/js/utils/cannonDebugRenderer.ts","./Envoirement":"assets/js/gameshop/Envoirement.js","./Controllers/Controll":"assets/js/gameshop/Controllers/Controll.js","./Modules/PauseModule":"assets/js/gameshop/Modules/PauseModule.js"}],"assets/js/gameshop/model.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -58421,7 +58581,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61292" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61899" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -3,21 +3,33 @@ import * as CANNON from 'cannon-es'
 import CannonDebugRenderer from '../utils/cannonDebugRenderer'
 
 import { Envoirement } from './Envoirement'
-import { Controll } from './Controll'
+import { Controll } from './Controllers/Controll'
+
+import { pause } from './Modules/PauseModule'
 
 export class GameShop{
     constructor(container, settings = {}){
         this.container = container
 
+        // Modules
+        this.pauseModule = pause()
+
         this.initCANNON()
         this.initTHREE()
 
         const loop = () => {
-            requestAnimationFrame( loop )
+            this.request = requestAnimationFrame( loop )
             this.updater()
             this.render()
         }
         loop()
+
+        window.addEventListener( 'keydown', onKeyDown.bind(this), false )
+        function onKeyDown(event){
+            if( event.code === 'Escape' ){
+                this.pauseModule.open( this.request, loop )
+            }
+        }
     }
 
     /**
@@ -41,21 +53,12 @@ export class GameShop{
         this.world.gravity.set(0,-20,0);
         this.world.broadphase = new CANNON.NaiveBroadphase();
 
-        // Create a sphere
-        const mass = 3, radius = 5
-        this.sphereShape = new CANNON.Sphere(radius)
-        this.sphereBody = new CANNON.Body({ mass: mass })
-        //this.sphereBody.addShape(this.sphereShape)
-        this.sphereBody.position.set(0,25,0)
-        this.sphereBody.linearDamping = .5
-        //this.world.addBody(this.sphereBody)
-
         // Create a plane
-        this.groundShape = new CANNON.Plane();
-        this.groundBody = new CANNON.Body({ mass: 0 });
-        this.groundBody.addShape(this.groundShape);
-        this.groundBody.quaternion.setFromAxisAngle(new CANNON.Vec3(1,0,0),-Math.PI/2);
-        this.world.addBody(this.groundBody);
+        this.groundShape = new CANNON.Plane()
+        this.groundBody = new CANNON.Body({ mass: 0 })
+        this.groundBody.addShape(this.groundShape)
+        this.groundBody.quaternion.setFromAxisAngle(new CANNON.Vec3(1,0,0),-Math.PI/2)
+        this.world.addBody(this.groundBody)
     }
 
     /**
@@ -105,10 +108,10 @@ export class GameShop{
         this.pickedObject = envoirement.getPickedObject
 
         // controls
-        this.controls = new Controll( 'edit', this.scene, this.renderer, this.camera, this.sphereBody, this.container, this.pickedObject )
+        this.controls = new Controll( 'game', this.scene, this.renderer, this.camera, this.world, this.container, this.pickedObject )
 
         /** Other Events */
-        window.addEventListener( 'resize', this.onWindowResize.bind(this), false );
+        window.addEventListener( 'resize', this.onWindowResize.bind(this), false )
 
         // debug
         this.cannonDebugRenderer = new CannonDebugRenderer(this.scene, this.world)
@@ -121,8 +124,9 @@ export class GameShop{
     }
 
     updater(){
-        this.controls.update()
         this.world.step(1/60)
+        this.controls.update( Date.now() - this.time )
+        this.controls.utils()
 
         this.cannonDebugRenderer.update()
         this.combineArr.forEach( item => {
@@ -142,5 +146,6 @@ export class GameShop{
 
     render(){
         this.renderer.render(this.scene, this.camera)
+        this.time = Date.now()
     }
 }

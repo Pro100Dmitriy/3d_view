@@ -1,83 +1,50 @@
 import * as THREE from 'three'
 import * as CANNON from 'cannon-es'
 
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-
-export class Controll{
-    constructor(type, scene, renderer, camera, sphereBody, container, meshesArr){
+export class Gamemode{
+    constructor( {scene, renderer, camera, world, container} ){
         this.scene = scene
         this.renderer = renderer
         this.camera = camera
-        this.sphereBody = sphereBody
         this.container = container
-        this.pickableObjects = meshesArr
+        this.world = world
 
-        let controls
-        switch (type){
-            case 'edit':
-                return this.editmode()
-            case 'game':
-                return this.gamemode()
-            default:
-                return this.editmode()
-        }
+        this.addSphere()
+        this.create()
     }
-
-    editmode(){
-        const controls = new OrbitControls( this.camera , this.renderer.domElement )
-
-        const raycaster = new THREE.Raycaster()
-        let intersects
-        let intersectedObject = []
-        let originalMaterials = new THREE.MeshBasicMaterial( {color: 0xe5e5e5, } );
-        let highlightedMaterial = new THREE.MeshBasicMaterial({
-            wireframe: true,
-            color: 0x00ff00
-        })
-        const viewInfo = viewInformation()
-
-        document.addEventListener( 'click', onDocumentClick.bind(this), false )
-        function onDocumentClick( event ){
-            raycaster.setFromCamera(
-                {
-                    x: (event.clientX / this.renderer.domElement.clientWidth) * 2 - 1,
-                    y: -(event.clientY / this.renderer.domElement.clientHeight) * 2 + 1
-                },
-                this.camera
-            )
-
-            console.log(this.pickableObjects)
-            intersects = raycaster.intersectObjects(this.pickableObjects, false)
-
-            if (intersects.length > 0) {
-                intersectedObject = intersects[0].object
-            } else {
-                intersectedObject = null
-            }
-            this.pickableObjects.forEach((o, i) => {
-                if (intersectedObject && intersectedObject.name === o.name) {
-                    viewInfo.open( intersectedObject.name )
-                    this.pickableObjects[i].material = highlightedMaterial
-                } else {
-                    this.pickableObjects[i].material = originalMaterials
-                }
-            })
-        }
-
-        return controls
-    }
-
-    gamemode(){
+    
+    create(){
         this.container.addEventListener('click', event => document.body.requestPointerLock() )
+
+        this.camera.position.x = this.sphereBody.position.x
+        this.camera.position.y = this.sphereBody.position.y
+        this.camera.position.z = this.sphereBody.position.z
 
         const controls = new PointerLockControls( this.camera , this.sphereBody )
         this.scene.add( controls.getObject() )
-        return controls
+
+        this.controls = controls
+        return this
+    }
+
+    addSphere(){
+        // Create a sphere
+        const mass = 3, radius = 5
+        this.sphereShape = new CANNON.Sphere(radius)
+        this.sphereBody = new CANNON.Body({ mass: mass })
+        this.sphereBody.addShape(this.sphereShape)
+        this.sphereBody.position.set(0,25,0)
+        this.sphereBody.linearDamping = .5
+        this.world.addBody(this.sphereBody)
+    }
+
+    get getControls(){
+        return this.controls
     }
 }
 
-var PointerLockControls = function( camera, cannonBody ) {
 
+var PointerLockControls = function( camera, cannonBody ) {
     var eyeYPos = 2; // eyes are 2 meters above the ground
     var velocityFactor = 0.2;
     var jumpVelocity = 20;
@@ -247,14 +214,7 @@ var PointerLockControls = function( camera, cannonBody ) {
 
         yawObject.position.copy(cannonBody.position);
     };
-};
-
-
-const viewInformation = () => {
-    const pointofview = document.querySelector('#view-info')
-    return {
-        open( name ){
-            pointofview.innerHTML = `<p>${name}</p>`
-        }
+    this.utils = function (){
+        camera.position.y = 1
     }
-}
+};
