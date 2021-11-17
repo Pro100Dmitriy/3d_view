@@ -2,15 +2,17 @@ import { Editmode } from './classes/Editmode'
 import { Gamemode } from './classes/Gamemode'
 
 export class Controll{
-    constructor(type, scene, renderer, camera, world, container, meshesArr){
+    constructor(type, scene, renderer, camera, world, container, meshesArr, combineArr){
         switch (type){
             case 'edit':
                 return new Editmode({
                     scene,
                     renderer,
                     camera,
+                    world,
                     container,
-                    meshesArr
+                    meshesArr,
+                    combineArr
                 }).getControls
             case 'game':
                 return new Gamemode({

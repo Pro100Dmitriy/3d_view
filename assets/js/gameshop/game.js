@@ -6,10 +6,13 @@ import { Envoirement } from './Envoirement'
 import { Controll } from './Controllers/Controll'
 
 import { pause } from './Modules/PauseModule'
+import { SETTINGS } from './settings'
 
 export class GameShop{
     constructor(container, settings = {}){
         this.container = container
+
+        const saveScene = document.querySelector('#save_scene')
 
         // Modules
         this.pauseModule = pause()
@@ -29,6 +32,11 @@ export class GameShop{
             if( event.code === 'Escape' ){
                 this.pauseModule.open( this.request, loop )
             }
+        }
+        saveScene.addEventListener( 'click', onSaveScene.bind(this), false )
+        function onSaveScene(event){
+            console.log(this.scene)
+            localStorage.setItem( `scene`, JSON.stringify(this.scene.children) )
         }
     }
 
@@ -77,16 +85,15 @@ export class GameShop{
         this.scene.add(new THREE.AxesHelper(5))
 
         // envoirement
-        const envoirement = new Envoirement( this.scene, this.world )
+        const envoirement = new Envoirement( this.scene, this.world, SETTINGS.gamemode )
 
         // light
-        //envoirement.lights()
         envoirement.illuminate()
 
         // floor
         const floorGeometry = new THREE.PlaneGeometry( 300, 300, 50, 50 )
         floorGeometry.applyMatrix4( new THREE.Matrix4().makeRotationX( - Math.PI / 2 ) )
-        const floorMaterial = new THREE.MeshLambertMaterial( { color: 0xdddddd } )
+        const floorMaterial = new THREE.MeshLambertMaterial( { color: 0x878787 } )
         const floorMesh = new THREE.Mesh( floorGeometry, floorMaterial )
         floorMesh.castShadow = true
         floorMesh.receiveShadow = true
@@ -108,7 +115,7 @@ export class GameShop{
         this.pickedObject = envoirement.getPickedObject
 
         // controls
-        this.controls = new Controll( 'game', this.scene, this.renderer, this.camera, this.world, this.container, this.pickedObject )
+        this.controls = new Controll( SETTINGS.gamemode, this.scene, this.renderer, this.camera, this.world, this.container, this.meshesArr )
 
         /** Other Events */
         window.addEventListener( 'resize', this.onWindowResize.bind(this), false )
@@ -128,7 +135,14 @@ export class GameShop{
         this.controls.update( Date.now() - this.time )
         this.controls.utils()
 
-        this.cannonDebugRenderer.update()
+        if( SETTINGS.gamemode === 'game' ){
+            this.cannonDebugRenderer.update()
+            this.cannonObjectUpdater()
+        }
+        
+    }
+
+    cannonObjectUpdater(){
         this.combineArr.forEach( item => {
             item[0].position.set(
                 item[1].position.x,

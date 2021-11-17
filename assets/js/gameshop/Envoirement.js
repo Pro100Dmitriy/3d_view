@@ -8,9 +8,10 @@ export class Envoirement{
     combineArr = []
     pickedObject = []
 
-    constructor(scene, world){
+    constructor(scene, world, gamemode){
         this.scene = scene
         this.world = world
+        this.gamemode = gamemode
     }
 
     illuminate(){
@@ -22,7 +23,6 @@ export class Envoirement{
 
     build(){
         MeshByScene.forEach( object => {
-            console.log(object)
             this.meshesArr.push( object.mesh )
             this.bodyArr.push( object.body )
             this.combineArr.push( [ object.mesh, object.body] )
@@ -33,6 +33,7 @@ export class Envoirement{
 
             this.scene.add( object.mesh )
             this.world.addBody( object.body )
+
         } )
     }
 
