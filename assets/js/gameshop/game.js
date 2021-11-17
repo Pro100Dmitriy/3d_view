@@ -108,7 +108,7 @@ export class GameShop{
         this.pickedObject = envoirement.getPickedObject
 
         // controls
-        this.controls = new Controll( 'game', this.scene, this.renderer, this.camera, this.world, this.container, this.pickedObject )
+        this.controls = new Controll( 'edit', this.scene, this.renderer, this.camera, this.world, this.container, this.pickedObject )
 
         /** Other Events */
         window.addEventListener( 'resize', this.onWindowResize.bind(this), false )

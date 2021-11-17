@@ -3,6 +3,7 @@ import { Gamemode } from './classes/Gamemode'
 
 export class Controll{
     constructor(type, scene, renderer, camera, world, container, meshesArr){
+        let controls, transform
         switch (type){
             case 'edit':
                 return new Editmode({

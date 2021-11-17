@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import * as CANNON from 'cannon-es'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import { TransformControls } from 'three/examples/jsm/controls/TransformControls'
 
 export class Editmode{
     constructor({scene, renderer, camera, container, meshesArr}){
@@ -15,16 +16,26 @@ export class Editmode{
 
     create(){
         const controls = new OrbitControls( this.camera , this.renderer.domElement )
+        const transform = new TransformControls( this.camera, this.renderer.domElement )
+
+        transform.addEventListener( 'dragging-changed', event => {
+            controls.enabled = !event.value
+        })
 
         controls.utils = () => {}
         this.raycaster()
         
         this.controls = controls
+        this.transform = transform
         return this
     }
 
     get getControls(){
         return this.controls
+    }
+
+    get getTransform(){
+        return this.transform
     }
 
     raycaster(){
@@ -40,6 +51,7 @@ export class Editmode{
 
         document.addEventListener( 'click', onDocumentClick.bind(this), false )
         function onDocumentClick( event ){
+            console.log( this.scene )
             raycaster.setFromCamera(
                 {
                     x: (event.clientX / this.renderer.domElement.clientWidth) * 2 - 1,
@@ -48,7 +60,6 @@ export class Editmode{
                 this.camera
             )
 
-            console.log(this.pickableObjects)
             intersects = raycaster.intersectObjects(this.pickableObjects, false)
 
             if (intersects.length > 0) {
@@ -56,12 +67,19 @@ export class Editmode{
             } else {
                 intersectedObject = null
             }
+
             this.pickableObjects.forEach((o, i) => {
+                const selected = this.pickableObjects[i]
+
                 if (intersectedObject && intersectedObject.name === o.name) {
                     viewInfo.open( intersectedObject.name )
-                    this.pickableObjects[i].material = highlightedMaterial
+
+                    this.transform.attach(selected)
+                    this.scene.add(this.transform)
+
+                    selected.material = highlightedMaterial
                 } else {
-                    this.pickableObjects[i].material = originalMaterials
+                    selected.material = originalMaterials
                 }
             })
         }
