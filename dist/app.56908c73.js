@@ -50185,6 +50185,7 @@ var AmbientLight = /*#__PURE__*/function () {
     value: function create(color, intensity) {
       var Amlight = new THREE.AmbientLight(color, intensity);
       Amlight.name = this.name;
+      Amlight.castShadow = true;
       this.light = Amlight;
     }
   }]);
@@ -59749,7 +59750,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54640" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54896" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
