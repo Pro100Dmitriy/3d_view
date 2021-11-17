@@ -2,10 +2,7 @@ import * as THREE from 'three'
 import * as CANNON from 'cannon-es'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { TransformControls } from 'three/examples/jsm/controls/TransformControls'
-<<<<<<< HEAD
 import { SETTINGS } from '../../settings'
-=======
->>>>>>> d42b5f961c60f07cbc1ae530e7a181406bd7306e
 
 export class Editmode{
     constructor({scene, renderer, camera, world, container, meshesArr}){
@@ -20,22 +17,12 @@ export class Editmode{
     }
 
     create(){
-<<<<<<< HEAD
         this.orbitControls = new OrbitControls( this.camera , this.renderer.domElement )
         this.transformControls = new TransformControls( this.camera, this.renderer.domElement )
         this.transformControls.setSize = SETTINGS.axisScale
-=======
-        const controls = new OrbitControls( this.camera , this.renderer.domElement )
-        const transform = new TransformControls( this.camera, this.renderer.domElement )
-
-        transform.addEventListener( 'dragging-changed', event => {
-            controls.enabled = !event.value
-        })
->>>>>>> d42b5f961c60f07cbc1ae530e7a181406bd7306e
 
         this.orbitControls.utils = () => {}
         this.raycaster()
-<<<<<<< HEAD
 
         this.transformControls.addEventListener( 'dragging-changed', event => {
             this.orbitControls.enabled = !event.value
@@ -58,11 +45,6 @@ export class Editmode{
             }
         }
 
-=======
-        
-        this.controls = controls
-        this.transform = transform
->>>>>>> d42b5f961c60f07cbc1ae530e7a181406bd7306e
         return this
     }
 
@@ -107,7 +89,6 @@ export class Editmode{
             } else {
                 intersectedObject = null
             }
-<<<<<<< HEAD
             this.pickableObjects.forEach( (selectedObj, i) => {
                 if (intersectedObject && intersectedObject.name === selectedObj.name) {
 
@@ -121,21 +102,6 @@ export class Editmode{
 
                     selectedObj.material = originalMaterials[i]
 
-=======
-
-            this.pickableObjects.forEach((o, i) => {
-                const selected = this.pickableObjects[i]
-
-                if (intersectedObject && intersectedObject.name === o.name) {
-                    viewInfo.open( intersectedObject.name )
-
-                    this.transform.attach(selected)
-                    this.scene.add(this.transform)
-
-                    selected.material = highlightedMaterial
-                } else {
-                    selected.material = originalMaterials
->>>>>>> d42b5f961c60f07cbc1ae530e7a181406bd7306e
                 }
             })
         }
