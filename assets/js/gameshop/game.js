@@ -115,7 +115,11 @@ export class GameShop{
         this.pickedObject = envoirement.getPickedObject
 
         // controls
+<<<<<<< HEAD
         this.controls = new Controll( SETTINGS.gamemode, this.scene, this.renderer, this.camera, this.world, this.container, this.meshesArr )
+=======
+        this.controls = new Controll( 'edit', this.scene, this.renderer, this.camera, this.world, this.container, this.pickedObject )
+>>>>>>> d42b5f961c60f07cbc1ae530e7a181406bd7306e
 
         /** Other Events */
         window.addEventListener( 'resize', this.onWindowResize.bind(this), false )

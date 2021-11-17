@@ -58981,6 +58981,7 @@ class TransformControlsPlane extends _three.Mesh {
 
 exports.TransformControlsPlane = TransformControlsPlane;
 TransformControlsPlane.prototype.isTransformControlsPlane = true;
+<<<<<<< HEAD
 },{"three":"node_modules/three/build/three.module.js"}],"assets/js/gameshop/settings.js":[function(require,module,exports) {
 "use strict";
 
@@ -58994,6 +58995,9 @@ var SETTINGS = {
 };
 exports.SETTINGS = SETTINGS;
 },{}],"assets/js/gameshop/Controllers/classes/Editmode.js":[function(require,module,exports) {
+=======
+},{"three":"node_modules/three/build/three.module.js"}],"assets/js/gameshop/Controllers/classes/Editmode.js":[function(require,module,exports) {
+>>>>>>> d42b5f961c60f07cbc1ae530e7a181406bd7306e
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -59009,8 +59013,11 @@ var _OrbitControls = require("three/examples/jsm/controls/OrbitControls");
 
 var _TransformControls = require("three/examples/jsm/controls/TransformControls");
 
+<<<<<<< HEAD
 var _settings = require("../../settings");
 
+=======
+>>>>>>> d42b5f961c60f07cbc1ae530e7a181406bd7306e
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -59044,7 +59051,15 @@ var Editmode = /*#__PURE__*/function () {
   _createClass(Editmode, [{
     key: "create",
     value: function create() {
+<<<<<<< HEAD
       var _this = this;
+=======
+      var controls = new _OrbitControls.OrbitControls(this.camera, this.renderer.domElement);
+      var transform = new _TransformControls.TransformControls(this.camera, this.renderer.domElement);
+      transform.addEventListener('dragging-changed', function (event) {
+        controls.enabled = !event.value;
+      });
+>>>>>>> d42b5f961c60f07cbc1ae530e7a181406bd7306e
 
       this.orbitControls = new _OrbitControls.OrbitControls(this.camera, this.renderer.domElement);
       this.transformControls = new _TransformControls.TransformControls(this.camera, this.renderer.domElement);
@@ -59053,6 +59068,7 @@ var Editmode = /*#__PURE__*/function () {
       this.orbitControls.utils = function () {};
 
       this.raycaster();
+<<<<<<< HEAD
       this.transformControls.addEventListener('dragging-changed', function (event) {
         _this.orbitControls.enabled = !event.value;
       });
@@ -59078,12 +59094,21 @@ var Editmode = /*#__PURE__*/function () {
         }
       }
 
+=======
+      this.controls = controls;
+      this.transform = transform;
+>>>>>>> d42b5f961c60f07cbc1ae530e7a181406bd7306e
       return this;
     }
   }, {
     key: "getControls",
     get: function get() {
       return this.orbitControls;
+    }
+  }, {
+    key: "getTransform",
+    get: function get() {
+      return this.transform;
     }
   }, {
     key: "raycaster",
@@ -59105,6 +59130,7 @@ var Editmode = /*#__PURE__*/function () {
       function onDocumentClick(event) {
         var _this2 = this;
 
+        console.log(this.scene);
         raycaster.setFromCamera({
           x: event.clientX / this.renderer.domElement.clientWidth * 2 - 1,
           y: -(event.clientY / this.renderer.domElement.clientHeight) * 2 + 1
@@ -59117,6 +59143,7 @@ var Editmode = /*#__PURE__*/function () {
           intersectedObject = null;
         }
 
+<<<<<<< HEAD
         this.pickableObjects.forEach(function (selectedObj, i) {
           if (intersectedObject && intersectedObject.name === selectedObj.name) {
             _this2.transformControls.attach(selectedObj);
@@ -59127,6 +59154,21 @@ var Editmode = /*#__PURE__*/function () {
             selectedObj.material = highlightedMaterial;
           } else {
             selectedObj.material = originalMaterials[i];
+=======
+        this.pickableObjects.forEach(function (o, i) {
+          var selected = _this.pickableObjects[i];
+
+          if (intersectedObject && intersectedObject.name === o.name) {
+            viewInfo.open(intersectedObject.name);
+
+            _this.transform.attach(selected);
+
+            _this.scene.add(_this.transform);
+
+            selected.material = highlightedMaterial;
+          } else {
+            selected.material = originalMaterials;
+>>>>>>> d42b5f961c60f07cbc1ae530e7a181406bd7306e
           }
         });
       }
@@ -59148,7 +59190,11 @@ var viewInformation = function viewInformation() {
     }
   };
 };
+<<<<<<< HEAD
 },{"three":"node_modules/three/build/three.module.js","cannon-es":"node_modules/cannon-es/dist/cannon-es.js","three/examples/jsm/controls/OrbitControls":"node_modules/three/examples/jsm/controls/OrbitControls.js","three/examples/jsm/controls/TransformControls":"node_modules/three/examples/jsm/controls/TransformControls.js","../../settings":"assets/js/gameshop/settings.js"}],"assets/js/gameshop/Controllers/classes/Gamemode.js":[function(require,module,exports) {
+=======
+},{"three":"node_modules/three/build/three.module.js","cannon-es":"node_modules/cannon-es/dist/cannon-es.js","three/examples/jsm/controls/OrbitControls":"node_modules/three/examples/jsm/controls/OrbitControls.js","three/examples/jsm/controls/TransformControls":"node_modules/three/examples/jsm/controls/TransformControls.js"}],"assets/js/gameshop/Controllers/classes/Gamemode.js":[function(require,module,exports) {
+>>>>>>> d42b5f961c60f07cbc1ae530e7a181406bd7306e
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -59419,6 +59465,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var Controll = function Controll(type, scene, renderer, camera, world, container, meshesArr, combineArr) {
   _classCallCheck(this, Controll);
 
+  var controls, transform;
+
   switch (type) {
     case 'edit':
       return new _Editmode.Editmode({
@@ -59627,7 +59675,11 @@ var GameShop = /*#__PURE__*/function () {
       this.bodysArr = envoirement.getBodyArr;
       this.pickedObject = envoirement.getPickedObject; // controls
 
+<<<<<<< HEAD
       this.controls = new _Controll.Controll(_settings.SETTINGS.gamemode, this.scene, this.renderer, this.camera, this.world, this.container, this.meshesArr);
+=======
+      this.controls = new _Controll.Controll('edit', this.scene, this.renderer, this.camera, this.world, this.container, this.pickedObject);
+>>>>>>> d42b5f961c60f07cbc1ae530e7a181406bd7306e
       /** Other Events */
 
       window.addEventListener('resize', this.onWindowResize.bind(this), false); // debug
@@ -59743,7 +59795,11 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
+<<<<<<< HEAD
   var ws = new WebSocket(protocol + '://' + hostname + ':' + "50022" + '/');
+=======
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61177" + '/');
+>>>>>>> d42b5f961c60f07cbc1ae530e7a181406bd7306e
 
   ws.onmessage = function (event) {
     checkedAssets = {};
