@@ -14,7 +14,7 @@ export class SpotLight{
         Splight.target.position.set( 0, 0, 0 )
         Splight.castShadow = true
 
-        Splight.shadow.camera.near = 0.5
+        Splight.shadow.camera.near = 20
         Splight.shadow.camera.far = 50
         Splight.shadow.camera.fov = 40
 

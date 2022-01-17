@@ -1,4 +1,5 @@
 export const SETTINGS = {
-    gamemode: 'edit',
-    axisScale: 0.1
+    gamemode: 'game',
+    axisScale: 0.1,
+    debug: false
 }

@@ -10,7 +10,7 @@ export class AmbientLight{
     create( color, intensity ){
         const Amlight = new THREE.AmbientLight( color, intensity )
         Amlight.name = this.name
-        Amlight.castShadow = true
+        Amlight.castShadow = false
         this.light = Amlight
     }
 }

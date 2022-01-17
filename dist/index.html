@@ -7,36 +7,30 @@
     <title>3D View</title>
 <link rel="stylesheet" href="/app.56908c73.css"></head>
 <body>
-    
-    <span class="snap"></span>
-    <div id="gameshop"></div>
-    <!--div id="gameshop_info" class="gameshop_info">
-        <div class="relative">
-            <div class="gameshop_info__buttons">
-                <button id="toggle_info" class="toggle_info"></button>
-            </div>
-            <div class="gameshop_info__content">
-                <ul class="game_settings">
-                    <li class="gamemode">
-                        <select name="text" id="gamemode">
-                            <option>Custom</option>
-                            <option>Single</option>
-                        </select>
-                    </li>
-                    <li id="object_properties" class="properties">
 
-                    </li>
-                </ul>
+    <section class="start">
+        <button id="open_gameshop" class="gameopen">Войти в магазин</button>
+        <div class="overlay"></div>
+    </section>
+
+    <section id="game-section" class="game">
+        <div class="game__block">
+            <div class="game-UI">
+                <span class="snap"></span>
+                <div class="test"></div>
+                <div id="view-info" class="view-info"></div>
             </div>
+            <div id="pause" class="pause">
+                <div class="pause__content">
+                    <h2>Кликните чтобы играть</h2>
+                    <p>W,A,S,D = Move, SPACE = Jump, MOUSE = Look</p>
+                </div>
+            </div>
+            <div id="gameshop"></div>
         </div>
-    </div-->
+    </section>
+
     
-    <div id="view-info" class="view-info"></div>
-    <button id="open_gameshop" class="gameopen">Виртуальный магазин</button>
-    <button id="save_scene" class="savescene">Сохранить</button>
-
-    <div id="pause" class="pause"></div>
-
     <script src="/app.56908c73.js"></script>
 </body>
 </html>

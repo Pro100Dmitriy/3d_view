@@ -4,8 +4,8 @@ import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js'
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 //import { FirstPersonControls } from 'three/examples/jsm/controls/FirstPersonControls'
-import CannonUtils from './utils/cannonUtils'
-import CannonDebugRenderer from './utils/cannonDebugRenderer'
+import CannonUtils from '../gameshop/utils/cannonUtils'
+import CannonDebugRenderer from '../gameshop/utils/cannonDebugRenderer'
 
 
 export class Gameshop{

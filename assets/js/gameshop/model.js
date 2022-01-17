@@ -1,12 +1,13 @@
 import { GameShop } from './game'
 
-export const gameshop = (containerID) => {
+export const gameshop = (containerID, sectionID) => {
     let instanse
+    const section = document.querySelector(`#${sectionID}`)
     const container = document.querySelector(`#${containerID}`)
     return {
         start(settings = {}) {
             if( !instanse ){
-                container.style.display = 'block'
+                section.style.display = 'block'
                 instanse = new GameShop(container, settings)
             }
             return instanse

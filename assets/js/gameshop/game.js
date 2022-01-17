@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import * as CANNON from 'cannon-es'
-import CannonDebugRenderer from '../utils/cannonDebugRenderer'
+import CannonDebugRenderer from './utils/cannonDebugRenderer'
 
 import { Envoirement } from './Envoirement'
 import { Controll } from './Controllers/Controll'
@@ -12,8 +12,6 @@ export class GameShop{
     constructor(container, settings = {}){
         this.container = container
 
-        const saveScene = document.querySelector('#save_scene')
-
         // Modules
         this.pauseModule = pause()
 
@@ -22,22 +20,16 @@ export class GameShop{
 
         const loop = () => {
             this.request = requestAnimationFrame( loop )
-            this.updater()
-            this.render()
+            if( this.pauseModule.controls.enabled ){
+                this.updater()
+                this.render()
+            }
+            window.addEventListener( 'resize', this.onWindowResize.bind(this), false )
         }
         loop()
 
-        window.addEventListener( 'keydown', onKeyDown.bind(this), false )
-        function onKeyDown(event){
-            if( event.code === 'Escape' ){
-                this.pauseModule.open( this.request, loop )
-            }
-        }
-        saveScene.addEventListener( 'click', onSaveScene.bind(this), false )
-        function onSaveScene(event){
-            console.log(this.scene)
-            localStorage.setItem( `scene`, JSON.stringify(this.scene.children) )
-        }
+        this.pauseModule.open() 
+
     }
 
     /**
@@ -61,7 +53,7 @@ export class GameShop{
         this.world.gravity.set(0,-20,0);
         this.world.broadphase = new CANNON.NaiveBroadphase();
 
-        // Create a plane
+        // Floor
         this.groundShape = new CANNON.Plane()
         this.groundBody = new CANNON.Body({ mass: 0 })
         this.groundBody.addShape(this.groundShape)
@@ -90,7 +82,7 @@ export class GameShop{
         // light
         envoirement.illuminate()
 
-        // floor
+        // Floor
         const floorGeometry = new THREE.PlaneGeometry( 300, 300, 50, 50 )
         floorGeometry.applyMatrix4( new THREE.Matrix4().makeRotationX( - Math.PI / 2 ) )
         const floorMaterial = new THREE.MeshLambertMaterial( { color: 0x878787 } )
@@ -118,16 +110,18 @@ export class GameShop{
         this.controls = new Controll( SETTINGS.gamemode, this.scene, this.renderer, this.camera, this.world, this.container, this.meshesArr )
 
         /** Other Events */
-        window.addEventListener( 'resize', this.onWindowResize.bind(this), false )
 
         // debug
-        this.cannonDebugRenderer = new CannonDebugRenderer(this.scene, this.world)
+        if( SETTINGS.debug ){
+            this.cannonDebugRenderer = new CannonDebugRenderer(this.scene, this.world)
+        }
     }
 
     onWindowResize(){
         this.camera.aspect = window.innerWidth / window.innerHeight
         this.camera.updateProjectionMatrix()
         this.renderer.setSize( window.innerWidth, window.innerHeight )
+        this.render()
     }
 
     updater(){
@@ -136,7 +130,9 @@ export class GameShop{
         this.controls.utils()
 
         if( SETTINGS.gamemode === 'game' ){
-            this.cannonDebugRenderer.update()
+            if( SETTINGS.debug ){
+                this.cannonDebugRenderer.update()
+            }
             this.cannonObjectUpdater()
         }
         

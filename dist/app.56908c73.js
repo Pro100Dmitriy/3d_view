@@ -117,7 +117,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+})({"C:/Users/Dmitry Shestak/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
 var bundleURL = null;
 
 function getBundleURLCached() {
@@ -149,7 +149,7 @@ function getBaseURL(url) {
 
 exports.getBundleURL = getBundleURLCached;
 exports.getBaseURL = getBaseURL;
-},{}],"node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
+},{}],"C:/Users/Dmitry Shestak/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
 var bundle = require('./bundle-url');
 
 function updateLink(link) {
@@ -184,12 +184,12 @@ function reloadCSS() {
 }
 
 module.exports = reloadCSS;
-},{"./bundle-url":"node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"assets/sass/style.sass":[function(require,module,exports) {
+},{"./bundle-url":"C:/Users/Dmitry Shestak/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"assets/sass/style.sass":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"node_modules/three/build/three.module.js":[function(require,module,exports) {
+},{"./..\\js\\uploads\\2022-01-17 113121.png":[["2022-01-17 113121.7e6cd10f.png","assets/js/uploads/2022-01-17 113121.png"],"assets/js/uploads/2022-01-17 113121.png"],"_css_loader":"C:/Users/Dmitry Shestak/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"node_modules/three/build/three.module.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -49839,7 +49839,7 @@ const endShapeContactEvent = {
   shapeA: null,
   shapeB: null
 };
-},{}],"assets/js/utils/cannonDebugRenderer.ts":[function(require,module,exports) {
+},{}],"assets/js/gameshop/utils/cannonDebugRenderer.ts":[function(require,module,exports) {
 "use strict"; // MIT License
 // Original file https://github.com/schteppe/cannon.js/blob/908aa1e954b54d05a43dd708584e882dfe30ae29/tools/threejs/CannonDebugRenderer.js CopyRight https://github.com/schteppe
 // Differences Copyright 2020-2021 Sean Bradley : https://sbcode.net/threejs/
@@ -50165,7 +50165,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
 
 var AmbientLight = /*#__PURE__*/function () {
   function AmbientLight(_ref) {
@@ -50185,7 +50185,7 @@ var AmbientLight = /*#__PURE__*/function () {
     value: function create(color, intensity) {
       var Amlight = new THREE.AmbientLight(color, intensity);
       Amlight.name = this.name;
-      Amlight.castShadow = true;
+      Amlight.castShadow = false;
       this.light = Amlight;
     }
   }]);
@@ -50260,7 +50260,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
 
 var SpotLight = /*#__PURE__*/function () {
   function SpotLight(_ref) {
@@ -50281,7 +50281,7 @@ var SpotLight = /*#__PURE__*/function () {
       Splight.position.set(10, 30, 20);
       Splight.target.position.set(0, 0, 0);
       Splight.castShadow = true;
-      Splight.shadow.camera.near = 0.5;
+      Splight.shadow.camera.near = 20;
       Splight.shadow.camera.far = 50;
       Splight.shadow.camera.fov = 40;
       Splight.shadowMapBias = 0.1;
@@ -58990,8 +58990,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.SETTINGS = void 0;
 var SETTINGS = {
-  gamemode: 'edit',
-  axisScale: 0.1
+  gamemode: 'game',
+  axisScale: 0.1,
+  debug: false
 };
 exports.SETTINGS = SETTINGS;
 },{}],"assets/js/gameshop/Controllers/classes/Editmode.js":[function(require,module,exports) {
@@ -59469,17 +59470,53 @@ exports.pause = void 0;
 
 var pause = function pause() {
   var pointofview = document.querySelector('#pause');
-  return {
-    func: null,
-    open: function open(request, func) {
-      this.func = func;
+  var controls = {
+    enabled: true
+  };
+  var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
+
+  if (havePointerLock) {
+    var element = document.body;
+
+    var pointerlockchange = function pointerlockchange(event) {
+      if (document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element) {
+        controls.enabled = true;
+        pointofview.style.display = 'none';
+      } else {
+        controls.enabled = false;
+        pointofview.style.display = 'block';
+      }
+    };
+
+    var pointerlockerror = function pointerlockerror(event) {
       pointofview.style.display = 'block';
-      window.cancelAnimationFrame(request);
-      pointofview.addEventListener('click', this.close);
+    };
+
+    document.addEventListener('pointerlockchange', pointerlockchange, false);
+    document.addEventListener('mozpointerlockchange', pointerlockchange, false);
+    document.addEventListener('webkitpointerlockchange', pointerlockchange, false);
+    document.addEventListener('pointerlockerror', pointerlockerror, false);
+    document.addEventListener('mozpointerlockerror', pointerlockerror, false);
+    document.addEventListener('webkitpointerlockerror', pointerlockerror, false);
+    pointofview.addEventListener('click', function (event) {
+      pointofview.style.display = 'none';
+      element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
+      element.requestPointerLock();
+    }, false);
+  } else {
+    pointofview.style.display = 'block';
+    pointofview.innerHTML = 'Your browser doesn\'t seem to support Pointer Lock API';
+  }
+
+  return {
+    html: pointofview,
+    controls: controls,
+    open: function open() {
+      pointofview.style.display = 'block';
+      controls.enabled = false;
     },
     close: function close() {
       pointofview.style.display = 'none';
-      return requestAnimationFrame(this.func);
     }
   };
 };
@@ -59497,7 +59534,7 @@ var THREE = _interopRequireWildcard(require("three"));
 
 var CANNON = _interopRequireWildcard(require("cannon-es"));
 
-var _cannonDebugRenderer = _interopRequireDefault(require("../utils/cannonDebugRenderer"));
+var _cannonDebugRenderer = _interopRequireDefault(require("./utils/cannonDebugRenderer"));
 
 var _Envoirement = require("./Envoirement");
 
@@ -59517,7 +59554,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
 
 var GameShop = /*#__PURE__*/function () {
   function GameShop(container) {
@@ -59527,8 +59564,7 @@ var GameShop = /*#__PURE__*/function () {
 
     _classCallCheck(this, GameShop);
 
-    this.container = container;
-    var saveScene = document.querySelector('#save_scene'); // Modules
+    this.container = container; // Modules
 
     this.pauseModule = (0, _PauseModule.pause)();
     this.initCANNON();
@@ -59537,26 +59573,17 @@ var GameShop = /*#__PURE__*/function () {
     var loop = function loop() {
       _this.request = requestAnimationFrame(loop);
 
-      _this.updater();
+      if (_this.pauseModule.controls.enabled) {
+        _this.updater();
 
-      _this.render();
+        _this.render();
+      }
+
+      window.addEventListener('resize', _this.onWindowResize.bind(_this), false);
     };
 
     loop();
-    window.addEventListener('keydown', onKeyDown.bind(this), false);
-
-    function onKeyDown(event) {
-      if (event.code === 'Escape') {
-        this.pauseModule.open(this.request, loop);
-      }
-    }
-
-    saveScene.addEventListener('click', onSaveScene.bind(this), false);
-
-    function onSaveScene(event) {
-      console.log(this.scene);
-      localStorage.setItem("scene", JSON.stringify(this.scene.children));
-    }
+    this.pauseModule.open();
   }
   /**
    * CANNON
@@ -59577,7 +59604,7 @@ var GameShop = /*#__PURE__*/function () {
       solver.tolerance = 0.1;
       this.world.solver = new CANNON.SplitSolver(solver);
       this.world.gravity.set(0, -20, 0);
-      this.world.broadphase = new CANNON.NaiveBroadphase(); // Create a plane
+      this.world.broadphase = new CANNON.NaiveBroadphase(); // Floor
 
       this.groundShape = new CANNON.Plane();
       this.groundBody = new CANNON.Body({
@@ -59606,7 +59633,7 @@ var GameShop = /*#__PURE__*/function () {
 
       var envoirement = new _Envoirement.Envoirement(this.scene, this.world, _settings.SETTINGS.gamemode); // light
 
-      envoirement.illuminate(); // floor
+      envoirement.illuminate(); // Floor
 
       var floorGeometry = new THREE.PlaneGeometry(300, 300, 50, 50);
       floorGeometry.applyMatrix4(new THREE.Matrix4().makeRotationX(-Math.PI / 2));
@@ -59636,10 +59663,11 @@ var GameShop = /*#__PURE__*/function () {
 
       this.controls = new _Controll.Controll(_settings.SETTINGS.gamemode, this.scene, this.renderer, this.camera, this.world, this.container, this.meshesArr);
       /** Other Events */
+      // debug
 
-      window.addEventListener('resize', this.onWindowResize.bind(this), false); // debug
-
-      this.cannonDebugRenderer = new _cannonDebugRenderer.default(this.scene, this.world);
+      if (_settings.SETTINGS.debug) {
+        this.cannonDebugRenderer = new _cannonDebugRenderer.default(this.scene, this.world);
+      }
     }
   }, {
     key: "onWindowResize",
@@ -59647,6 +59675,7 @@ var GameShop = /*#__PURE__*/function () {
       this.camera.aspect = window.innerWidth / window.innerHeight;
       this.camera.updateProjectionMatrix();
       this.renderer.setSize(window.innerWidth, window.innerHeight);
+      this.render();
     }
   }, {
     key: "updater",
@@ -59656,7 +59685,10 @@ var GameShop = /*#__PURE__*/function () {
       this.controls.utils();
 
       if (_settings.SETTINGS.gamemode === 'game') {
-        this.cannonDebugRenderer.update();
+        if (_settings.SETTINGS.debug) {
+          this.cannonDebugRenderer.update();
+        }
+
         this.cannonObjectUpdater();
       }
     }
@@ -59680,7 +59712,7 @@ var GameShop = /*#__PURE__*/function () {
 }();
 
 exports.GameShop = GameShop;
-},{"three":"node_modules/three/build/three.module.js","cannon-es":"node_modules/cannon-es/dist/cannon-es.js","../utils/cannonDebugRenderer":"assets/js/utils/cannonDebugRenderer.ts","./Envoirement":"assets/js/gameshop/Envoirement.js","./Controllers/Controll":"assets/js/gameshop/Controllers/Controll.js","./Modules/PauseModule":"assets/js/gameshop/Modules/PauseModule.js","./settings":"assets/js/gameshop/settings.js"}],"assets/js/gameshop/model.js":[function(require,module,exports) {
+},{"three":"node_modules/three/build/three.module.js","cannon-es":"node_modules/cannon-es/dist/cannon-es.js","./utils/cannonDebugRenderer":"assets/js/gameshop/utils/cannonDebugRenderer.ts","./Envoirement":"assets/js/gameshop/Envoirement.js","./Controllers/Controll":"assets/js/gameshop/Controllers/Controll.js","./Modules/PauseModule":"assets/js/gameshop/Modules/PauseModule.js","./settings":"assets/js/gameshop/settings.js"}],"assets/js/gameshop/model.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -59690,15 +59722,16 @@ exports.gameshop = void 0;
 
 var _game = require("./game");
 
-var gameshop = function gameshop(containerID) {
+var gameshop = function gameshop(containerID, sectionID) {
   var instanse;
+  var section = document.querySelector("#".concat(sectionID));
   var container = document.querySelector("#".concat(containerID));
   return {
     start: function start() {
       var settings = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
       if (!instanse) {
-        container.style.display = 'block';
+        section.style.display = 'block';
         instanse = new _game.GameShop(container, settings);
       }
 
@@ -59718,11 +59751,11 @@ require("../sass/style.sass");
 var _model = require("./gameshop/model");
 
 var open = document.querySelector('#open_gameshop');
-var GAME = (0, _model.gameshop)('gameshop');
+var GAME = (0, _model.gameshop)('gameshop', 'game-section');
 open.addEventListener('click', function () {
   GAME.start();
 });
-},{"../sass/style.sass":"assets/sass/style.sass","./gameshop/model":"assets/js/gameshop/model.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"../sass/style.sass":"assets/sass/style.sass","./gameshop/model":"assets/js/gameshop/model.js"}],"C:/Users/Dmitry Shestak/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -59750,7 +59783,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59506" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60376" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
@@ -59926,5 +59959,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["node_modules/parcel-bundler/src/builtins/hmr-runtime.js","assets/js/app.js"], null)
+},{}]},{},["C:/Users/Dmitry Shestak/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","assets/js/app.js"], null)
 //# sourceMappingURL=/app.56908c73.js.map
