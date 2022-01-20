@@ -3,15 +3,23 @@ import * as CANNON from 'cannon-es'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { TransformControls } from 'three/examples/jsm/controls/TransformControls'
 import { SETTINGS } from '../../settings'
+import { transpileModule } from 'typescript'
 
 export class Editmode{
-    constructor({scene, renderer, camera, world, container, meshesArr}){
+    constructor({scene, renderer, camera, world, container, pickedArr, gropArr}){
         this.scene = scene
         this.renderer = renderer
         this.camera = camera
         this.world = world
         this.container = container
-        this.pickableObjects = meshesArr
+        this.pickableObjects = pickedArr
+        this.modelGroupArr = gropArr
+
+        this.modelGroupArr.forEach( object => {
+            object[3].mass = 0
+        } )
+
+        this.viewInfo = viewInformation()
 
         this.create()
     }
@@ -27,6 +35,16 @@ export class Editmode{
         this.transformControls.addEventListener( 'dragging-changed', event => {
             this.orbitControls.enabled = !event.value
         } )
+        this.transformControls.addEventListener( 'change', event => {
+            const selectedObj = this.transformControls.object
+            let highlightedMaterial = new THREE.MeshBasicMaterial({
+                wireframe: true,
+            })
+
+            this.viewInfo.open( selectedObj.name, selectedObj.position, selectedObj.rotation, selectedObj.scale )
+            selectedObj.material = highlightedMaterial
+        } )
+        
         window.addEventListener('keydown', onKeyDown.bind(this) )
         function onKeyDown(event){
             switch (event.key) {
@@ -62,10 +80,8 @@ export class Editmode{
         let intersectedObject = []
         let originalMaterials = []
         let highlightedMaterial = new THREE.MeshBasicMaterial({
-            wireframe: false,
-            color: 0x32c546
+            wireframe: true
         })
-        const viewInfo = viewInformation()
 
         this.pickableObjects.forEach( picked => {
             originalMaterials.push( picked.material )
@@ -73,7 +89,6 @@ export class Editmode{
 
         document.addEventListener( 'click', onDocumentClick.bind(this), false )
         function onDocumentClick( event ){
-            console.log( this.scene )
             raycaster.setFromCamera(
                 {
                     x: (event.clientX / this.renderer.domElement.clientWidth) * 2 - 1,
@@ -95,7 +110,7 @@ export class Editmode{
                     this.transformControls.attach( selectedObj )
                     this.scene.add(this.transformControls)
 
-                    viewInfo.open( intersectedObject.name )
+                    this.viewInfo.open( selectedObj.name, selectedObj.position, selectedObj.rotation, selectedObj.scale )
                     selectedObj.material = highlightedMaterial
 
                 } else {
@@ -113,8 +128,13 @@ export class Editmode{
 const viewInformation = () => {
     const pointofview = document.querySelector('#view-info')
     return {
-        open( name ){
-            pointofview.innerHTML = `<p>${name}</p>`
+        open( name, position, rotation, scale ){
+            pointofview.innerHTML = `
+                <p>${name}</p>
+                <p>x: ${position.x}, y: ${position.y}, z: ${position.z}</p>
+                <p>${rotation._x} ${rotation._y} ${rotation._z}</p>
+                <p>${scale.x} ${scale.y} ${scale.z}</p>
+            `
         }
     }
 }

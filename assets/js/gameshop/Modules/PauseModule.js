@@ -1,5 +1,7 @@
+import { SETTINGS } from "../settings"
+
 export const pause = () => {
-    const pointofview = document.querySelector('#pause')
+    const pointofview = document.querySelector('.pauseModule')
     const controls = {enabled: true}
 
     const havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document
@@ -30,7 +32,9 @@ export const pause = () => {
         pointofview.addEventListener( 'click', event => {
             pointofview.style.display = 'none'
             element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
-            element.requestPointerLock();
+            if( SETTINGS.gamemode === 'game' ){
+                element.requestPointerLock();
+            }
         }, false )
 
     }else{
@@ -43,10 +47,11 @@ export const pause = () => {
         controls,
         open(){
             pointofview.style.display = 'block'
-            controls.enabled = false
-        },
-        close(){
-            pointofview.style.display = 'none'
+            if( SETTINGS.gamemode === 'game' ){
+                controls.enabled = false
+            }else{
+                controls.enabled = true
+            }
         }
     }
 }

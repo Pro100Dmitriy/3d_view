@@ -64,7 +64,7 @@ body {
   overflow: hidden;
   background: #242424;
 }
-.game .game__block .pause {
+.game .game__block .pauseModule {
   cursor: pointer;
   position: absolute;
   z-index: 103;
@@ -73,7 +73,7 @@ body {
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
 }
-.game .game__block .pause__content {
+.game .game__block .pauseModule__content {
   width: 100%;
   height: 100%;
   color: white;
@@ -119,13 +119,20 @@ body {
   z-index: 10000;
   background: blue;
 }
-.game .game__block .game-UI .view-info {
+.game .game__block .edit-UI {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.game .game__block .edit-UI .view-info {
   background: white;
   position: absolute;
+  z-index: 102;
   bottom: 10px;
   left: 10px;
-  width: 100px;
-  height: 50px;
+  width: 200px;
+  height: 250px;
   box-shadow: 0px 5px 16px #0000004a;
 }
 

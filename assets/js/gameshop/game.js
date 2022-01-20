@@ -30,6 +30,9 @@ export class GameShop{
 
         this.pauseModule.open() 
 
+        document.querySelector('#view-info').addEventListener('click', event => {
+            this.saveChanges()
+        })
     }
 
     /**
@@ -73,7 +76,7 @@ export class GameShop{
         
         // scene
         this.scene = new THREE.Scene()
-        this.scene.fog = new THREE.Fog( 0x000000, 0, 500 )
+        this.scene.fog = new THREE.Fog( 0x9cbbc9, 0, 500 )
         this.scene.add(new THREE.AxesHelper(5))
 
         // envoirement
@@ -105,9 +108,10 @@ export class GameShop{
         this.meshesArr = envoirement.getMeshesArr
         this.bodysArr = envoirement.getBodyArr
         this.pickedObject = envoirement.getPickedObject
-
+        this.modelGroupArr = envoirement.modelGroupArr
+        
         // controls
-        this.controls = new Controll( SETTINGS.gamemode, this.scene, this.renderer, this.camera, this.world, this.container, this.meshesArr )
+        this.controls = new Controll( SETTINGS.gamemode, this.scene, this.renderer, this.camera, this.world, this.container, this.pickedObject, this.modelGroupArr )
 
         /** Other Events */
 
@@ -115,6 +119,57 @@ export class GameShop{
         if( SETTINGS.debug ){
             this.cannonDebugRenderer = new CannonDebugRenderer(this.scene, this.world)
         }
+        this.loadChanges()
+    }
+
+    saveChanges(){
+        const changes = {}
+
+        this.pickedObject.forEach( mesh => {
+            changes[mesh.name] = {
+                position: mesh.position,
+                rotation: mesh.rotation,
+                scale: mesh.scale
+            }
+        } )
+
+        localStorage.setItem( `test1`, JSON.stringify(changes) )
+    }
+
+    loadChanges(){
+        const changes = JSON.parse( localStorage.getItem('test1') )
+        if( changes ){
+            this.pickedObject.forEach( mesh => {
+                mesh.position.copy( changes[mesh.name].position )
+                mesh.rotation.copy( changes[mesh.name].rotation )
+                mesh.scale.copy( changes[mesh.name].scale )
+            } )
+            this.modelGroupArr.forEach( item => {
+                // mesh
+                item[0].position.copy( item[1].position )
+                item[0].rotation.copy( item[1].rotation )
+                item[0].scale.set( ...item[1].scale )
+                // Helper
+                item[2].position.copy( item[1].position )
+                item[2].rotation.copy( item[1].rotation )
+                item[2].scale.set( ...item[1].scale )
+                item[2].update()
+                // body
+                item[3].position.copy( item[1].position )
+                item[3].quaternion.copy( item[0].quaternion )
+                if( item[3].shapes[0].scale ){
+                    item[3].shapes[0].scale.x = item[3].shapes[0].scale.x * item[1].scale.x
+                    item[3].shapes[0].scale.y = item[3].shapes[0].scale.y * item[1].scale.y
+                    item[3].shapes[0].scale.z = item[3].shapes[0].scale.z * item[1].scale.z
+                }else{
+                    item[3].shapes[0].halfExtents.x = item[3].shapes[0].halfExtents.x * item[1].scale.x
+                    item[3].shapes[0].halfExtents.y = item[3].shapes[0].halfExtents.y * item[1].scale.y
+                    item[3].shapes[0].halfExtents.z = item[3].shapes[0].halfExtents.z * item[1].scale.z
+                }
+            } )
+        }
+        
+        
     }
 
     onWindowResize(){
@@ -135,7 +190,12 @@ export class GameShop{
             }
             this.cannonObjectUpdater()
         }
-        
+        if( SETTINGS.gamemode === 'edit' ){
+            if( SETTINGS.debug ){
+                this.cannonDebugRenderer.update()
+            }
+            this.groupObjectUpdater()
+        }
     }
 
     cannonObjectUpdater(){
@@ -151,6 +211,22 @@ export class GameShop{
                 item[1].quaternion.z,
                 item[1].quaternion.w
             )
+        })
+    }
+    groupObjectUpdater(){
+        this.modelGroupArr.forEach( item => {
+            // mesh
+            item[0].position.copy( item[1].position )
+            item[0].rotation.copy( item[1].rotation )
+            item[0].scale.set( ...item[1].scale )
+            // Helper
+            item[2].position.copy( item[1].position )
+            item[2].rotation.copy( item[1].rotation )
+            item[2].scale.set( ...item[1].scale )
+            item[2].update()
+            // body
+            item[3].position.copy( item[1].position )
+            item[3].quaternion.copy( item[0].quaternion )
         } )
     }
 

@@ -1,12 +1,21 @@
 import { MeshByScene, LightsByScene } from './ByScene'
+import { SETTINGS } from './settings'
 
 export class Envoirement{
     lightsArr = []
 
+    /**
+     * this.mesh
+     * this.modelGroup
+     * this.drag
+     * this.helper
+     * this.body
+     */
     meshesArr = []
     bodyArr = []
     combineArr = []
     pickedObject = []
+    modelGroupArr = []
 
     constructor(scene, world, gamemode){
         this.scene = scene
@@ -25,15 +34,24 @@ export class Envoirement{
         MeshByScene.forEach( object => {
             this.meshesArr.push( object.mesh )
             this.bodyArr.push( object.body )
-            this.combineArr.push( [ object.mesh, object.body] )
+            this.combineArr.push( [object.mesh, object.body] )
 
             if( object.picked ){
-                this.pickedObject.push( object.mesh )
+                if( object.drag ){
+                    this.pickedObject.push( object.drag )
+                }else{
+                    this.pickedObject.push( object.mesh )
+                }
             }
 
+            if( object.drag ){
+                this.modelGroupArr.push( [ object.mesh, object.drag, object.helper, object.body ] )
+            }
+
+            if( object.helper ) this.scene.add( object.helper )
+            if( object.drag ) this.scene.add( object.drag )
             this.scene.add( object.mesh )
             this.world.addBody( object.body )
-
         } )
     }
 
@@ -55,5 +73,9 @@ export class Envoirement{
 
     get getLihtsArr(){
         return this.lightsArr
+    }
+
+    get modelGroupArr(){
+        return this.modelGroupArr
     }
 }
