@@ -1,37 +1,73 @@
 import * as THREE from 'three'
 import * as CANNON from 'cannon-es'
 
-export class Cube{
-    constructor( {name, scale, position, material, mass, picked} ){
-        this.name = name
-        this.picked = picked
+/**
+ * new Cube({
+        name: 'Hoodie_Samurai_Table',
+        position: {x: 22.550, y: -0.564, z: 9.3305},
+        rotation: {x: 0, y: -1.2138, z: 0},
+        scale: {x: 7.485, y: 8.109, z: 7.682},
+        material: new THREE.MeshStandardMaterial(),
+        mass: 0,
+        picked: false
+    }),
+ */
 
-        this.create( scale, position, material, mass )
+export class Cube{
+    constructor( {name, position, rotation, scale, material, mass, picked} ){
+        this.name = name
+        this.picked = picked ?? false
+
+        this.create( position, rotation, scale, material, mass )
     }
 
-    create( scale, position, material = false, mass ){
-        const geometry = new THREE.BoxGeometry( ...scale )
-        let meshMaterial
-        if( material ){
-            meshMaterial = material
-        }else{
-            meshMaterial = new THREE.MeshLambertMaterial( {color: 0xffffff } )
-        }
-        const cubeMesh = new THREE.Mesh( geometry, meshMaterial )
-        cubeMesh.name = this.name
-        cubeMesh.position.x = position[0]
-        cubeMesh.position.y = position[1]
-        cubeMesh.position.z = position[2]
-        cubeMesh.castShadow = true
-        cubeMesh.receiveShadow = true
-        this.mesh = cubeMesh
-        // CANNON
-        const cubeShape  = new CANNON.Box(new CANNON.Vec3( scale[0]/2, scale[1]/2, scale[2]/2 ))
-        const cubeBody  = new CANNON.Body({mass: mass})
+    create(
+        position = {x: 0, y: 0, z: 0},
+        rotation = {x: 0, y: 0, z: 0},
+        scale = {x: 0, y: 0, z: 0},
+        material = new THREE.MeshLambertMaterial(),
+        mass = 1
+    ){
+        const geometry = new THREE.BoxGeometry( scale.x, scale.y, scale.z )
+        const materialMesh = material
+        const model = new THREE.Mesh( geometry, materialMesh )
+        model.name = this.name
+        model.castShadow = true
+        model.receiveShadow = true
+        model.position.set( position.x, position.y, position.z )
+        model.rotation.set( rotation.x, rotation.y, rotation.z )
+        this.model = model
+        // DRAG ----------------------------------------------------------------
+        const geometryDragBox = new THREE.BoxGeometry( scale.x, scale.y, scale.z )
+        const metarialDragBox = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 })
+        const modelDragBox = new THREE.Mesh( geometryDragBox, metarialDragBox )
+        modelDragBox.name = this.name
+        modelDragBox.position.set( position.x, position.y, position.z )
+        modelDragBox.rotation.set( rotation.x, rotation.y, rotation.z )
+        modelDragBox.quaternion.copy( model.quaternion )
+        // HELPER ---------------------------------------------------------------
+        const boxHelper = new THREE.BoxHelper(modelDragBox, 0xffff00)
+        boxHelper.name = this.name
+        boxHelper.visible = false
+        modelDragBox.boxHelper = boxHelper
+        this.drag = modelDragBox
+        this.helper = boxHelper
+        // CANNON ---------------------------------------------------------------
+        const cubeShape = new CANNON.Box(new CANNON.Vec3( scale.x/2, scale.y/2, scale.z/2 ))
+        const cubeBody = new CANNON.Body({mass: mass})
         cubeBody.addShape(cubeShape)
-        cubeBody.position.x = cubeMesh.position.x
-        cubeBody.position.y = cubeMesh.position.y
-        cubeBody.position.z = cubeMesh.position.z
-        this.body = cubeBody        
+        cubeBody.position.set( position.x, position.y, position.z )
+        cubeBody.quaternion.copy( modelDragBox.quaternion )
+        this.body = cubeBody
+
+
+        // -----------------------------------------------------------------------
+        /**
+         * EXPORTED:
+         *  this.model
+         *  this.drag
+         *  this.helper
+         *  this.body
+         */ 
     }
 }

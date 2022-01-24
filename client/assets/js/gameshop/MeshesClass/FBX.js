@@ -2,130 +2,139 @@ import * as THREE from 'three'
 import * as CANNON from 'cannon-es'
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader'
 
-export class FBX{
-    constructor( {name, file, boundingShape, position, scaleScalar, scale, material, texture, picked, mass, productID} ){
-        this.name = name
-        this.picked = picked
-        this.productID = productID ?? false
+/**
+ * 
+ *  name: 'Hoodie_Samurai',
+    file: './models/01_Hoodie-Samurai.fbx',
+    boundingShape: false,
+    position: {x: 22.47639, y: 5.9922, z: 9.9419},
+    rotation: {x: 0, y: -0.45619, z: 0},
+    scale: {x: 1, y: 1, z: 1},
+    size: .05,
+    material: new THREE.MeshStandardMaterial(),
+    textures: {
+        baseColorMap: new THREE.TextureLoader().load("./models/01_Hoodie-Samurai__Low_Hoodie-Samurai_BaseColor.png"),
+        roughnessMap: new THREE.TextureLoader().load("./models/01_Hoodie-Samurai__Low_Hoodie-Samurai_Roughness.png"),
+        metalnesMap: new THREE.TextureLoader().load("./models/01_Hoodie-Samurai__Low_Hoodie-Samurai_Metallic.png"),
+        normalMap: new THREE.TextureLoader().load("./models/01_Hoodie-Samurai__Low_Hoodie-Samurai_Normal.png"),
+    },
+    picked: false,
+    productID: 2,
+    mass: 1
+ */
 
-        this.loadBoundingMesh( boundingShape, scaleScalar )
-        this.create( file, position, scaleScalar, scale, material, texture, mass )
+export class FBX{
+    constructor( {name, file, boundingShape, position, rotation, scale, size, material, textures, mass, picked, productID, isHover} ){
+        this.name = name
+        this.picked = picked ?? false
+        this.productID = productID ?? false
+        this.isHover = isHover ?? false
+
+        this.create( file, boundingShape, position, rotation, scale, size, material, textures, mass )
     }
 
-    create( file, {x, y, z}, scaleScalar, scale, material = false, texture = false, mass = 1 ){
-        let loader = new FBXLoader()
-        loader.load(
+    create( 
+        file,
+        boundingShape = false,
+        position = {x: 0, y: 0, z: 0},
+        rotation = {x: 0, y: 0, z: 0},
+        scale = {x: 1, y: 1, z: 1},
+        size = 0.05,
+        material = new THREE.MeshLambertMaterial(),
+        textures = false, 
+        mass = 1
+    ){
+        new FBXLoader().load(
             file,
             fbx => {
-                const fbxMesh = fbx
-                const onlyMesh = fbxMesh.children[0]
-                onlyMesh.geometry.computeBoundingBox()
-                let boundingBox = onlyMesh.geometry.boundingBox
-                let boundingHeight = (boundingBox.max.y - boundingBox.min.y) * scaleScalar
-                let boundingWidth = (boundingBox.max.x - boundingBox.min.x) * scaleScalar
-                let boundingDepth = (boundingBox.max.z - boundingBox.min.z) * scaleScalar
+                const model = fbx
+                const mesh = model.children[0]
+                
+                model.name = this.name
+                model.productID = this.productID
+                model.receiveShadow = true
+                model.castShadow = true
 
-                fbxMesh.name = this.name
-                fbxMesh.productID = this.productID
-                let fbxMaterial
-                if( material ){
-                    fbxMaterial = material
-                }else{
-                    fbxMaterial = new THREE.MeshLambertMaterial()
-                }
-                if( texture ){
-                    material.map = texture
-                    if( onlyMesh.isMesh ){
-                        onlyMesh.material = fbxMaterial
+                mesh.material = this.loadTextures( material, textures )
+                mesh.castShadow = true
+                mesh.receiveShadow = true
+                //mesh.frustumCulled = false
 
-                        onlyMesh.castShadow = true
-                        onlyMesh.frustumCulled = false
-                        onlyMesh.geometry.computeVertexNormals()
-                    }
-                }else{
-                    if( onlyMesh.isMesh ){
-                        onlyMesh.castShadow = true
-                        onlyMesh.frustumCulled = false
-                        onlyMesh.geometry.computeVertexNormals()
-                    } 
-                }
+                mesh.scale.setScalar( size )
+                mesh.geometry.computeVertexNormals()
+                mesh.geometry.computeBoundingBox()
 
-                fbxMesh.receiveShadow = true
-                fbxMesh.castShadow = true
-                onlyMesh.scale.setScalar(scaleScalar)
-
-                let box = new THREE.Box3().setFromObject( fbxMesh )
-                let center = new THREE.Vector3()
-                let coordsByCenter = box.getCenter( center )
+                let box = new THREE.Box3().setFromObject( model )
+                let coordsByCenter = box.getCenter( new THREE.Vector3() )
 
                 // X
                 if( coordsByCenter.x !== 0 ){
-                    onlyMesh.position.x = -coordsByCenter.x
+                    mesh.position.x = -coordsByCenter.x
                 }else{
-                    onlyMesh.position.x = 0
+                    mesh.position.x = 0
                 }
                 // Y
                 if( coordsByCenter.y !== 0 ){
-                    onlyMesh.position.y = -coordsByCenter.y
+                    mesh.position.y = -coordsByCenter.y
                 }else{
-                    onlyMesh.position.y = 0
+                    mesh.position.y = 0
                 }
                 // Z
                 if( coordsByCenter.z !== 0 ){
-                    onlyMesh.position.z = -coordsByCenter.z
+                    mesh.position.z = -coordsByCenter.z
                 }else{
-                    onlyMesh.position.z = 0
+                    mesh.position.z = 0
                 }
 
-                fbxMesh.position.x = x
-                fbxMesh.position.y = y
-                fbxMesh.position.z = z
+                model.position.set( position.x, position.y, position.z )
+                model.rotation.set( rotation.x, rotation.y ,rotation.z )
+                model.scale.set( scale.x, scale.y, scale.z )
 
-                this.mesh = fbxMesh
-                // DRAG
+                this.model = model
+                // DRAG ----------------------------------------------------------------
+                let boundingBox = mesh.geometry.boundingBox
+                let bounding = {
+                    boundingHeight: (boundingBox.max.y - boundingBox.min.y) * size,
+                    boundingWidth: (boundingBox.max.x - boundingBox.min.x) * size,
+                    boundingDepth: (boundingBox.max.z - boundingBox.min.z) * size,
+                }
+                
                 const modelDragBox = new THREE.Mesh(
-                    new THREE.BoxGeometry( boundingWidth, boundingHeight, boundingDepth ),
+                    new THREE.BoxGeometry( bounding.boundingWidth, bounding.boundingHeight, bounding.boundingDepth ),
                     new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 })
                 )
-                modelDragBox.name = fbxMesh.name
+                modelDragBox.name = this.name
                 modelDragBox.productID = this.productID
-                modelDragBox.position.x = x
-                modelDragBox.position.y = y
-                modelDragBox.position.z = z
-                //HELPER
+                modelDragBox.position.set( position.x, position.y, position.z )
+                modelDragBox.rotation.set( rotation.x, rotation.y ,rotation.z )
+                modelDragBox.scale.set( scale.x, scale.y, scale.z )
+                modelDragBox.quaternion.copy( model.quaternion )
+                // HELPER ---------------------------------------------------------------
                 const boxHelper = new THREE.BoxHelper(modelDragBox, 0xffff00)
-                boxHelper.name = fbxMesh.name
+                boxHelper.name = this.name
                 boxHelper.visible = false
                 modelDragBox.boxHelper = boxHelper
                 this.drag = modelDragBox
                 this.helper = boxHelper
-                // CANNON
-                let vertices, indices, fbxShape
-
-                if( this.boundingMesh ){
-                    vertices = this.boundingMesh.geometry.attributes.position.array
-                    indices = Object.keys(vertices).map(Number)
-                    fbxShape = new CANNON.Trimesh( vertices, indices )
-                    fbxShape.scale.x = scaleScalar
-                    fbxShape.scale.y = scaleScalar
-                    fbxShape.scale.z = scaleScalar
-                }else{
-                    fbxShape = new CANNON.Box(new CANNON.Vec3(boundingWidth/2, boundingHeight/2, boundingDepth/2))
-                }
-                const fbxBody = new CANNON.Body({ mass: mass })
-                fbxBody.addShape(fbxShape)
-                fbxBody.position.x = x
-                fbxBody.position.y = y
-                fbxBody.position.z = z
-                this.body = fbxBody
-
+                // CANNON ---------------------------------------------------------------
+                this.loadBoundingMesh( boundingShape, bounding, size, scale )
+                    .then( resolve => {
+                        const fbxBody = new CANNON.Body({ mass: mass })
+                        fbxBody.addShape(resolve)
+                        fbxBody.name = this.name
+                        fbxBody.position.set( position.x, position.y, position.z )
+                        fbxBody.quaternion.copy( modelDragBox.quaternion )
+                        this.body = fbxBody
+                    } )
+                
+                
+                // -----------------------------------------------------------------------
                 /**
                  * EXPORTED:
-                 * this.mesh
-                 * this.modelGroup
-                 * this.drag
-                 * this.helper
-                 * this.body
+                 *  this.model
+                 *  this.drag
+                 *  this.helper
+                 *  this.body
                  */
             },
             xhr => {
@@ -137,26 +146,98 @@ export class FBX{
         )
     }
 
-    loadBoundingMesh( boundingShape = false ){
-        if( !boundingShape ){
-            this.boundingMesh = false
-            return
-        } 
-        
-        let loader = new FBXLoader()
-        loader.load(
-            boundingShape,
-            bounding => {
-                const fbxBoundingMesh = bounding
-                fbxBoundingMesh.children[0].geometry.computeBoundingBox()
-                this.boundingMesh = fbxBoundingMesh.children[0]
-            },
-            xhr => {
-                console.log( (xhr.loaded / xhr.total) * 100 + '%  loaded' )
-            },
-            error => {
-                console.log(error)
-            }
-        )
+    loadBoundingMesh( boundingShape, bounding, size, scale ){
+        if( boundingShape ){
+            return new Promise( resolve => {
+                new FBXLoader().load(
+                    boundingShape,
+                    fbx => {
+                        fbx.children[0].geometry.computeBoundingBox()
+                        let boundingMesh = fbx.children[0]
+                        let vertices = boundingMesh.geometry.attributes.position.array
+                        let indices = Object.keys(vertices).map(Number)
+                        let fbxShape = new CANNON.Trimesh( vertices, indices )
+                        fbxShape.scale.set( size * scale.x, size * scale.y, size * scale.z )
+                        resolve( fbxShape )
+                    },
+                    xhr => {
+                        console.log( (xhr.loaded / xhr.total) * 100 + '%  loaded' )
+                    },
+                    error => {
+                        console.log(error)
+                    }
+                )
+            } )
+        }else{
+            return new Promise( resolve => {
+                resolve( new CANNON.Box(new CANNON.Vec3(bounding.boundingWidth/2, bounding.boundingHeight/2, bounding.boundingDepth/2)) )
+            } )
+        }
+    }
+
+    loadTextures( material, textures ){
+        if( material.type != 'MeshStandardMaterial' ) return material
+        if( textures ){
+            if( 'baseColorMap' in textures ) material.map = textures.baseColorMap
+            if( 'roughnessMap' in textures ) material.roughnessMap = textures.roughnessMap
+            if( 'metalnessMap' in textures ) material.metalnessMap = textures.metalnessMap
+            if( 'normalMap' in textures ) material.normalMap = textures.normalMap
+        }
+        return material
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// let fbxShape, vertices, indices
+// if( boundingShape ){
+//     vertices = this.boundingMesh.geometry.attributes.position.array
+//     indices = Object.keys(vertices).map(Number)
+//     fbxShape = new CANNON.Trimesh( vertices, indices )
+//     fbxShape.scale.set( size, size, size )
+// }else{
+//     fbxShape = new CANNON.Box(new CANNON.Vec3(bounding.boundingWidth/2, bounding.boundingHeight/2, bounding.boundingDepth/2)) 
+// }
+// const fbxBody = new CANNON.Body({ mass: mass })
+// fbxBody.addShape(fbxShape)
+// fbxBody.name = this.name
+// fbxBody.position.set( position.x, position.y, position.z )
+// this.body = fbxBody
+
+
+    // loadBoundingMesh( boundingShape = false ){
+    //     if( !boundingShape ) return
+
+    //     new FBXLoader().load(
+    //         boundingShape,
+    //         fbx => {
+    //             fbx.children[0].geometry.computeBoundingBox()
+    //             this.boundingMesh = fbx.children[0]
+    //         },
+    //         xhr => {
+    //             console.log( (xhr.loaded / xhr.total) * 100 + '%  loaded' )
+    //         },
+    //         error => {
+    //             console.log(error)
+    //         }
+    //     )
+    // }

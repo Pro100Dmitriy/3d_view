@@ -33,11 +33,12 @@ export class Gamemode{
 
     addSphere(){
         // Create a sphere
-        const mass = 3, radius = 5
+        //const mass = 3, radius = 5
+        const mass = 2, radius = 4
         this.sphereShape = new CANNON.Sphere(radius)
         this.sphereBody = new CANNON.Body({ mass: mass })
         this.sphereBody.addShape(this.sphereShape)
-        this.sphereBody.position.set(0,25,0)
+        this.sphereBody.position.set(0,15,0)
         this.sphereBody.linearDamping = .5
         this.world.addBody(this.sphereBody)
     }
@@ -68,6 +69,7 @@ export class Gamemode{
             } else {
                 intersectedObject = null
             }
+
             this.products.forEach( selectedProd => {
                 if (intersectedObject && intersectedObject.name === selectedProd.name) {
                     this.viewInfo.open( selectedProd.name, selectedProd.productID )

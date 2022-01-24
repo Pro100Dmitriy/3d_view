@@ -7,11 +7,12 @@ import { Controll } from './Controllers/Controll'
 
 import { pause } from './Modules/PauseModule'
 import { SETTINGS } from './settings'
-import { sendRequest } from './utils'
+import { ServerManeger } from '../global/ServerManeger'
 
 export class GameShop{
     constructor(container, settings = {}){
         this.container = container
+        this.server = new ServerManeger()
 
         // Modules
         this.pauseModule = pause()
@@ -32,7 +33,7 @@ export class GameShop{
         this.pauseModule.open() 
 
         document.querySelector('#view-info').addEventListener('click', event => {
-            this.saveChanges()
+            //this.saveChanges()
         })
     }
 
@@ -77,7 +78,7 @@ export class GameShop{
         
         // scene
         this.scene = new THREE.Scene()
-        this.scene.fog = new THREE.Fog( 0x9cbbc9, 0, 500 )
+        this.scene.fog = new THREE.Fog( 0x9cbbc9, 0, 700 )
         this.scene.add(new THREE.AxesHelper(5))
 
         // envoirement
@@ -85,11 +86,14 @@ export class GameShop{
 
         // light
         envoirement.illuminate()
+        this.pickedLight = envoirement.getPickedLight
+        this.lightGroupArr = envoirement.getLightGroupArr
 
         // Floor
         const floorGeometry = new THREE.PlaneGeometry( 300, 300, 50, 50 )
         floorGeometry.applyMatrix4( new THREE.Matrix4().makeRotationX( - Math.PI / 2 ) )
-        const floorMaterial = new THREE.MeshLambertMaterial( { color: 0x878787 } )
+        //const floorMaterial = new THREE.MeshLambertMaterial( { color: 0x878787 } )
+        const floorMaterial = new THREE.MeshPhysicalMaterial( { color: 0xCCCCCC } )
         const floorMesh = new THREE.Mesh( floorGeometry, floorMaterial )
         floorMesh.castShadow = true
         floorMesh.receiveShadow = true
@@ -100,6 +104,10 @@ export class GameShop{
         this.renderer.setClearColor(this.scene.fog.color, 1)
         this.renderer.setSize(window.innerWidth, window.innerHeight)
         this.renderer.shadowMap.enabled = true
+        //this.renderer.shadowMap.type = THREE.PCFSoftShadowMap
+        // this.renderer.shadowMap.type = THREE.BasicShadowMap
+        this.renderer.shadowMap.type = THREE.PCFShadowMap
+        // this.renderer.shadowMap.type = THREE.VSMShadowMap
         this.renderer.domElement.setAttribute("id", 'object')
         this.container.appendChild( this.renderer.domElement )
 
@@ -107,9 +115,10 @@ export class GameShop{
         envoirement.build()
         this.pickedObject = envoirement.getPickedObject
         this.modelGroupArr = envoirement.modelGroupArr
+        this.isHoverArr = envoirement.isHoverArr
 
         // controls
-        this.controls = new Controll( SETTINGS.gamemode, this.scene, this.renderer, this.camera, this.world, this.container, this.pickedObject, this.modelGroupArr, this.pickedObject )
+        this.controls = new Controll( SETTINGS.gamemode, this.scene, this.renderer, this.camera, this.world, this.container, this.pickedObject, this.modelGroupArr, this.isHoverArr, this.pickedLight )
 
         /** Other Events */
 
@@ -117,28 +126,16 @@ export class GameShop{
         if( SETTINGS.debug ){
             this.cannonDebugRenderer = new CannonDebugRenderer(this.scene, this.world)
         }
-        this.loadChanges()
-
-        sendRequest( {
-            method: 'GET',
-            url: '/api/shop2',
-            action: 'loadmore',
-            data: '1',
-            onloadstart_callback(){
-                
-            }
-        } )
-        .then( data => {
-            console.log(data)
-        } )
-        .catch( error => {
-            console.log(error)
-        } )
+        if( SETTINGS.loadChanges ){
+            this.loadChanges()
+        }
     }
 
+    /**
+     * SERVER
+     */
     saveChanges(){
         const changes = {}
-
         this.pickedObject.forEach( mesh => {
             changes[mesh.name] = {
                 position: mesh.position,
@@ -147,16 +144,40 @@ export class GameShop{
             }
         } )
 
-        localStorage.setItem( `test1`, JSON.stringify(changes) )
-    }
+        const save = {
+            name: 'public_world',
+            data: JSON.stringify(changes)
+        }
 
-    loadChanges(){
-        const changes = JSON.parse( localStorage.getItem('test1') )
-        if( changes ){
+        this.server.post({ url: `/api/scene`, body: JSON.stringify(save),
+            onloadstart_callback(){
+                 console.log('wait') 
+            }
+        })
+        .then( response => {
+            console.log(response)
+        } )
+        .catch( error => {
+            console.log( error )
+        } )
+
+    }
+    
+    async loadChanges(){
+        let saveData
+        await this.server.get({ url: `/api/scene/public_world`,
+            onloadstart_callback(){}
+        })
+        .then( response => {
+            saveData = response[0] ? JSON.parse( response[0].data ) : false
+        } )
+        .catch( error => console.log( error ) )
+
+        if( saveData ){
             this.pickedObject.forEach( mesh => {
-                mesh.position.copy( changes[mesh.name].position )
-                mesh.rotation.copy( changes[mesh.name].rotation )
-                mesh.scale.copy( changes[mesh.name].scale )
+                mesh.position.copy( saveData[mesh.name].position )
+                mesh.rotation.copy( saveData[mesh.name].rotation )
+                mesh.scale.copy( saveData[mesh.name].scale )
             } )
             this.modelGroupArr.forEach( item => {
                 // mesh
@@ -182,9 +203,7 @@ export class GameShop{
                     item[3].shapes[0].halfExtents.z = item[3].shapes[0].halfExtents.z * item[1].scale.z
                 }
             } )
-        }
-        
-        
+        } 
     }
 
     onWindowResize(){
@@ -210,6 +229,7 @@ export class GameShop{
                 this.cannonDebugRenderer.update()
             }
             this.groupObjectUpdater()
+            this.groupLightUpdater()
         }
     }
 
@@ -235,6 +255,19 @@ export class GameShop{
             // body
             item[3].position.copy( item[1].position )
             item[3].quaternion.copy( item[1].quaternion )
+        } )
+    }
+    groupLightUpdater(){
+        this.lightGroupArr.forEach( item => {
+            // light
+            item[0].position.copy( item[1].position )
+            item[0].rotation.copy( item[1].rotation )
+            item[0].scale.set( ...item[1].scale )
+            // Helper
+            item[2].position.copy( item[1].position )
+            item[2].rotation.copy( item[1].rotation )
+            item[2].scale.set( ...item[1].scale )
+            item[2].update()
         } )
     }
 

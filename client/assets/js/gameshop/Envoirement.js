@@ -1,21 +1,15 @@
 import { MeshByScene, LightsByScene } from './ByScene'
 
 export class Envoirement{
-    lightsArr = []
-
     /**
-     * this.mesh
-     * this.modelGroup
-     * this.drag
-     * this.helper
-     * this.body
+     * IMPORTED LIGHTS:
+     *  this.model
+     *  this.drag
+     *  this.helper
+     *  this.body
      */
-    meshesArr = []
-    bodyArr = []
-    combineArr = []
-    pickedObject = []
-    modelGroupArr = []
-    products = []
+    pickedLight = []
+    lightGroupArr = []
 
     constructor(scene, world, gamemode){
         this.scene = scene
@@ -25,63 +19,75 @@ export class Envoirement{
 
     illuminate(){
         LightsByScene.forEach( object => {
-            this.lightsArr.push( object.light )
-            this.scene.add( object.light )
-        } )
-    }
-
-    build(){
-        MeshByScene.forEach( object => {
-            this.meshesArr.push( object.mesh )
-            this.bodyArr.push( object.body )
-            this.combineArr.push( [object.mesh, object.body] )
 
             if( object.picked ){
                 if( object.drag ){
-                    this.pickedObject.push( object.drag )
-                    this.products.push( object.drag )
-                }else{
-                    this.pickedObject.push( object.mesh )
-                    this.products.push( object.mesh )
+                    this.pickedLight.push( object.drag )
                 }
             }
 
             if( object.drag ){
-                this.modelGroupArr.push( [ object.mesh, object.drag, object.helper, object.body ] )
+                this.lightGroupArr.push( [ object.light, object.drag, object.helper ] )
+            }
+
+            this.scene.add( object.light )
+            if( object.target ) this.scene.add( object.target )
+            if( object.helper ) this.scene.add( object.helper )
+            if( object.drag ) this.scene.add( object.drag )
+        } )
+    }
+
+    get getPickedLight(){
+        return this.pickedLight
+    }
+
+    get getLightGroupArr(){
+        return this.lightGroupArr
+    }
+
+    /**
+     * IMPORTED OBJECT:
+     *  this.model
+     *  this.drag
+     *  this.helper
+     *  this.body
+     */
+    pickedObject = []
+    modelGroupArr = []
+    isHoverArr = []
+
+    build(){
+        MeshByScene.forEach( object => {
+            if( object.isHover ) this.isHoverArr.push( object.drag )
+
+            if( object.picked ){
+                if( object.drag ){
+                    this.pickedObject.push( object.drag )
+                }else{
+                    this.pickedObject.push( object.model )
+                }
+            }
+
+            if( object.drag ){
+                this.modelGroupArr.push( [ object.model, object.drag, object.helper, object.body ] )
             }
 
             if( object.helper ) this.scene.add( object.helper )
             if( object.drag ) this.scene.add( object.drag )
-            this.scene.add( object.mesh )
+            this.scene.add( object.model )
             this.world.addBody( object.body )
         } )
-    }
-
-    get getMeshesArr(){
-        return this.meshesArr
-    }
-
-    get getBodyArr(){
-        return this.bodyArr
-    }
-
-    get getCombineArr(){
-        return this.combineArr
     }
 
     get getPickedObject(){
         return this.pickedObject
     }
 
-    get getLihtsArr(){
-        return this.lightsArr
-    }
-
     get modelGroupArr(){
         return this.modelGroupArr
     }
 
-    get products(){
-        return this.products
+    get isHoverArr(){
+        return this.isHoverArr
     }
 }
