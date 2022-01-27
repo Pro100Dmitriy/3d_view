@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import * as CANNON from 'cannon-es'
+import { PageBuilder } from '../../Pages/PageBuilder'
 
 export class Gamemode{
     constructor( {scene, renderer, camera, world, container, products} ){
@@ -10,7 +11,11 @@ export class Gamemode{
         this.products = products ?? false
         this.world = world
 
-        this.viewInfo = viewInformation()
+        this.preview = preview()
+
+        this.pageBuilder = new PageBuilder({
+            root: document.querySelector('app-root')
+        })
 
         this.addSphere()
         this.create()
@@ -18,6 +23,15 @@ export class Gamemode{
     
     create(){
         this.container.addEventListener('click', event => document.body.requestPointerLock() )
+        window.addEventListener( 'keydown', event => {
+            if( event.key == 'e' ){
+                if( this.selectedProdID ){
+                    this.pageBuilder.render()
+                    this.page = productPage()
+                    this.page.open()
+                }
+            }
+        } )
 
         this.camera.position.x = this.sphereBody.position.x
         this.camera.position.y = this.sphereBody.position.y
@@ -72,7 +86,8 @@ export class Gamemode{
 
             this.products.forEach( selectedProd => {
                 if (intersectedObject && intersectedObject.name === selectedProd.name) {
-                    this.viewInfo.open( selectedProd.name, selectedProd.productID )
+                    this.selectedProdID = selectedProd.productID
+                    this.preview.open( selectedProd.name, selectedProd.productID )
                 } else {}
             })
         }
@@ -261,7 +276,7 @@ var PointerLockControls = function( camera, cannonBody ) {
 
 
 /** Modules */
-const viewInformation = () => {
+const preview = () => {
     const pointofview = document.querySelector('#view-info')
     return {
         open( name, productID ){
@@ -272,6 +287,28 @@ const viewInformation = () => {
         },
         close(){
             pointofview.innerHTML = ``
+        }
+    }
+}
+
+
+const productPage = () => {
+    const page = document.querySelector('#single-PM')
+    const pageMenu = document.querySelector('#single-PM-menu')
+    const closeButton = pageMenu.querySelector('#close-PM')
+
+    closeButton.addEventListener( 'click', event => {
+        event.preventDefault()
+        page.classList.remove( 'PM-open' )
+        pageMenu.classList.remove( 'PM__menu-open' )
+        setTimeout( () => page.style.display = 'none', 100 )
+    } )
+
+    return {
+        open(){
+            page.style.display = 'block'
+            setTimeout( () => page.classList.add( 'PM-open' ), 100 )
+            setTimeout( () => pageMenu.classList.add( 'PM__menu-open' ), 100 )
         }
     }
 }

@@ -8,7 +8,7 @@ export const pause = () => {
     if( havePointerLock ){
         let element = document.body
 
-        const pointerlockchange = ( event ) => {
+        const pointerlockchange = event => {
             if ( document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element ) {
                 controls.enabled = true
                 pointofview.style.display = 'none';
@@ -17,7 +17,7 @@ export const pause = () => {
                 pointofview.style.display = 'block';
             }
         }
-        const pointerlockerror = ( event ) => {
+        const pointerlockerror = event => {
             pointofview.style.display = 'block'
         }
 
@@ -36,6 +36,16 @@ export const pause = () => {
                 element.requestPointerLock();
             }
         }, false )
+
+        document.addEventListener( 'keypress', event => {
+            if( event.key == 'e' ){
+                controls.enabled = false
+                pointofview.style.display = 'block'
+                document.exitPointerLock = document.exitPointerLock || document.mozExitPointerLock || document.webkitExitPointerLock
+                document.exitPointerLock()
+                //element.requestPointerLock();
+            }
+        } )
 
     }else{
         pointofview.style.display = 'block'
