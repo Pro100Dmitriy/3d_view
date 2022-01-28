@@ -64,6 +64,9 @@ export const MeshByScene = [
         material: new THREE.MeshStandardMaterial(),
         textures: {
             baseColorMap: new THREE.TextureLoader().load("./models/Sale_Cube_Sale_Cube_BaseColor.png"),
+            roughnessMap: new THREE.TextureLoader().load("./models/Sale_Cube_Sale_Cube_Roughness.png"),
+            metalnessMap: new THREE.TextureLoader().load("./models/Sale_Cube_Sale_Cube_Metallic.png"),
+            normalMap: new THREE.TextureLoader().load("./models/Sale_Cube_Sale_Cube_Normal.png"),
         },
         mass: 0,
         picked: true,
@@ -280,6 +283,9 @@ export const MeshByScene = [
         material: new THREE.MeshStandardMaterial(),
         textures: {
             baseColorMap: new THREE.TextureLoader().load("./models/02_Hoodie_Low_model_Hoodie_standart_BaseColor.png"),
+            roughnessMap: new THREE.TextureLoader().load("./models/02_Hoodie_Low_model_Hoodie_standart_Roughness.png"),
+            metalnessMap: new THREE.TextureLoader().load("./models/02_Hoodie_Low_model_Hoodie_standart_Metallic.png"),
+            normalMap: new THREE.TextureLoader().load("./models/02_Hoodie_Low_model_Hoodie_standart_Normal.png"),
         },
         mass: 0,
         picked: false,
@@ -335,6 +341,9 @@ export const MeshByScene = [
         material: new THREE.MeshStandardMaterial(),
         textures: {
             baseColorMap: new THREE.TextureLoader().load("./models/01_Hoodie_Black&White__Low_Hoodie_Black&White_BaseColor.png"),
+            roughnessMap: new THREE.TextureLoader().load("./models/01_Hoodie_Black&White__Low_Hoodie_Black&White_Roughness.png"),
+            metalnessMap: new THREE.TextureLoader().load("./models/01_Hoodie_Black&White__Low_Hoodie_Black&White_Metallic.png"),
+            normalMap: new THREE.TextureLoader().load("./models/01_Hoodie_Black&White__Low_Hoodie_Black&White_Normal.png"),
         },
         mass: 0,
         picked: false,
@@ -448,7 +457,7 @@ export const MeshByScene = [
 export const LightsByScene = [
     new AmbientLight({
         name: 'ambient_01',
-        color: '0x111111',
+        color: 0xffffff,
         intensity: 0.2
     }),
     new SpotLight({
@@ -457,7 +466,7 @@ export const LightsByScene = [
         decay: 4,
         angle: 0.55,
         penumbra: 1,
-        color: '0xffffff',
+        color: 0xffffff,
         position: {x: 5, y: 15.8534, z: 9.660},
         target: {x: 5, y: 5.8534, z: 9.660},
         picked: false
@@ -468,7 +477,7 @@ export const LightsByScene = [
         decay: 4,
         angle: 0.55,
         penumbra: 1,
-        color: '0xffffff',
+        color: 0xffffff,
         position: {x: 22.47639, y: 15.9922, z: 9.9419},
         target: {x: 22.47639, y: 5.9922, z: 9.9419},
         picked: false
@@ -479,7 +488,7 @@ export const LightsByScene = [
         decay: 4,
         angle: 0.55,
         penumbra: 1,
-        color: '0xffffff',
+        color: 0xffffff,
         position: {x: -13.2279, y: 15.9223, z: 7.8961},
         target: {x: -13.2279, y: 5.9223, z: 7.8961},
         picked: false
@@ -491,7 +500,7 @@ export const LightsByScene = [
         decay: 4,
         angle: 0.35,
         penumbra: 0.5,
-        color: '0xffffff',
+        color: 0xffffff,
         position: {x: 24.4889, y: 1, z: 37.943437},
         target: {x: 35.2882, y: 39.7019578, z: 15.1447545},
         picked: false
@@ -503,7 +512,7 @@ export const LightsByScene = [
         decay: 4,
         angle: 0.8,
         penumbra: 1,
-        color: '0xffffff',
+        color: 0xffffff,
         position: {x: -8.13830219, y: 1, z: -8.1357589},
         target: {x: -12.35762, y: 20.79132, z: -29.75655},
         picked: false
@@ -514,7 +523,7 @@ export const LightsByScene = [
         decay: 4,
         angle: 1,
         penumbra: 1,
-        color: '0xffffff',
+        color: 0xffffff,
         position: {x: -13.9014716, y: 1, z: -3.2703958},
         target: {x: -40.170279, y: 23, z: -13.940256},
         picked: false
@@ -526,7 +535,7 @@ export const LightsByScene = [
         decay: 4,
         angle: 1,
         penumbra: 1,
-        color: '0xffffff',
+        color: 0xffffff,
         position: {x: 2.3784256030285746, y: 79.68738123634537, z: 16.500743751944018},
         picked: false
     }),
@@ -538,7 +547,7 @@ export const LightsByScene = [
         decay: 4,
         angle: 1,
         penumbra: 1,
-        color: '0xffffff',
+        color: 0xffffff,
         position: {x: -17.244869651446255, y: 1, z: -52.572690116401276},
         target: {x: -16.26374870255499, y: 55.563, z: -74.17485627821264},
         picked: true
@@ -550,7 +559,7 @@ export const LightsByScene = [
         decay: 4,
         angle: 1,
         penumbra: 1,
-        color: '0xffffff',
+        color: 0xffffff,
         position: {x: 55.4291459245843, y: 1, z: -11.14109422089939},
         target: {x: 79.6254932542966, y: 55.93738768406464, z: -21.749565762961808},
         picked: true
@@ -562,7 +571,7 @@ export const LightsByScene = [
         decay: 4,
         angle: 1,
         penumbra: 1,
-        color: '0xffffff',
+        color: 0xffffff,
         position: {x: 29.238097242334362, y: 1, z: 63.317353908559824},
         target: {x: 53.22856067483545, y: 74.5765, z: 82.91642709353724},
         picked: true
@@ -574,7 +583,7 @@ export const LightsByScene = [
         decay: 4,
         angle: 1,
         penumbra: 1,
-        color: '0xffffff',
+        color: 0xffffff,
         position: {x: -27.760709965279823, y: 1, z: 73.02178596714766},
         target: {x: -49.5111, y: 66.26333, z: 98.547},
         picked: true
@@ -586,7 +595,7 @@ export const LightsByScene = [
         decay: 4,
         angle: 1,
         penumbra: 1,
-        color: '0xffffff',
+        color: 0xffffff,
         position: {x: -62.715378503877005, y: 1, z: -1.2094923778869173},
         target: {x: -88.528, y: 64.5765, z: -9.8459},
         picked: true

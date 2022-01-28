@@ -21,10 +21,10 @@
     &:hover
         &::before
             transform: translate(-50%, -50%) rotate(0deg)
-            background: $red
+            background: $gray
         &::after
             transform: translate(-50%, -50%) rotate(0deg)
-            background: $red
+            background: $gray
     &::before
         content: ''
         position: absolute
@@ -59,6 +59,23 @@
     background: $black
     color: white
     &:hover
+
+
+.el-stroke-button-white
+    font-family: 'Jost'
+    font-size: 0.93rem
+    font-weight: 500
+    text-transform: unset
+    letter-spacing: 0.1rem
+    line-height: 1rem
+    padding: 0.93rem 1.4rem 
+    border: 2px solid white
+    background: transparent
+    color: white
+    transition: 0.3s ease
+    &:hover
+        background: white
+        color: $black
 
 
 .el-quantity

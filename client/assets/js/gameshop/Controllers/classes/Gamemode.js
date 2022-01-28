@@ -11,8 +11,6 @@ export class Gamemode{
         this.products = products ?? false
         this.world = world
 
-        this.preview = preview()
-
         this.pageBuilder = new PageBuilder({root: document.querySelector('app-root')})
 
         this.addSphere()
@@ -23,7 +21,6 @@ export class Gamemode{
         this.container.addEventListener('click', event => document.body.requestPointerLock() )
         document.addEventListener( 'keydown', event => {
             if( event.key == 'e' ){
-                console.log( this.selectedProdID )
                 if( this.selectedProdID ){
                     this.pageBuilder.open( this.selectedProdID )
                 }
@@ -84,7 +81,10 @@ export class Gamemode{
             this.products.forEach( selectedProd => {
                 if (intersectedObject && intersectedObject.name === selectedProd.name) {
                     this.selectedProdID = selectedProd.productID
-                    this.preview.open( selectedProd.name, selectedProd.productID )
+                    //this.preview.open( selectedProd.name, selectedProd.productID )
+                    if( this.selectedProdID ){
+                        this.pageBuilder.preview( this.selectedProdID )
+                    }
                 } else {}
             })
         }
@@ -270,20 +270,3 @@ var PointerLockControls = function( camera, cannonBody ) {
         camera.position.y = 1
     }
 };
-
-
-/** Modules */
-const preview = () => {
-    const pointofview = document.querySelector('#view-info')
-    return {
-        open( name, productID ){
-            pointofview.innerHTML = `
-                <p>${name}</p>
-                <p>${productID}</p>
-            `
-        },
-        close(){
-            pointofview.innerHTML = ``
-        }
-    }
-}

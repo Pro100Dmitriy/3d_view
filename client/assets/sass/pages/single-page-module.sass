@@ -23,6 +23,8 @@
     box-sizing: border-box
     transition: all 0.4s ease-out
     opacity: 0
+    @media screen and ( max-width: 600px )
+        padding: 0 1rem
     &__map
         .map
             &__list
@@ -33,6 +35,10 @@
                 flex-direction: row
                 &__item
                     margin-right: 4.67rem
+                    @media screen and ( max-width: 750px )
+                        margin-right: 2rem
+                    @media screen and ( max-width: 600px )
+                        display: none
                     &>a
                         color: $black
                         position: relative
@@ -75,23 +81,43 @@
         position: relative
 
 
+
 .PMC__main-section
     display: flex
     flex-direction: row-reverse
+    @media screen and ( max-width: 800px )
+        flex-direction: column
     &__image
         width: 60%
         overflow: hidden
         background-position: center
         background-size: cover
         background-repeat: no-repeat
+        @media screen and ( max-width: 800px )
+            width: 100%
+            height: 100vw
     &__text
         width: 40%
         background: white
         padding-left: 3.33rem
         padding-top: 9.4rem
         padding-bottom: 17.4rem
+        @media screen and ( max-width: 800px )
+            width: 100%
+            margin-top: -26rem
+            padding-top: 0rem
+            padding-bottom: 5rem
+            background: transparent
+        @media screen and ( max-width: 600px )
+            padding-left: 1rem
+            padding-right: 1rem
+            margin-top: -14rem
         .h1-style
             margin-bottom: 2.2rem
+            @media screen and ( max-width: 600px )
+                font-size: 3.5rem
+                letter-spacing: 0em
+                line-height: 3.67rem
             span
                 color: $red
         &__details
@@ -117,10 +143,13 @@
                             color: $black
             .buttons
                 display: flex
+                flex-wrap: wrap
                 .add-to-cart
                     margin-right: 1.33rem
+                    margin-bottom: 1.33rem
                 .el-quantity
                     margin-right: 1.33rem
+                    margin-bottom: 1.33rem
             
 
 
@@ -128,6 +157,12 @@
     background: $black
     padding-top: 3rem
     padding-bottom: 5.8rem
+    @media screen and ( max-width: 1400px )
+        padding-left: 3.33rem
+        padding-right: 3.33rem
+    @media screen and ( max-width: 600px )
+        padding-left: 1rem
+        padding-right: 1rem
     &__content
         &__title
             h2
@@ -137,9 +172,13 @@
             .row
                 display: flex
                 flex-direction: row
+                @media screen and ( max-width: 600px )
+                    flex-direction: column
                 .col
                     flex: 50
                     position: relative
+                    @media screen and ( max-width: 600px )
+                        flex: 100
                     &::after
                         content: ''
                         position: absolute
@@ -148,10 +187,16 @@
                         width: 1px
                         height: 100%
                         background: $white
+                        @media screen and ( max-width: 600px )
+                            width: 0
                     &:first-child
                         padding-right: 1.2rem
+                        @media screen and ( max-width: 600px )
+                            padding-right: 0rem
                     &:last-child
                         padding-left: 1.2rem
+                        @media screen and ( max-width: 600px )
+                            padding-left: 0rem
                         &::after
                             width: 0px
                     p
@@ -217,15 +262,15 @@
                 background-repeat: no-repeat
         .small-slider
             .slick-slide
-                width: calc( 100vw / 6 )
-                height: calc( 100vw / 6 / 1.777 )
+                width: calc( 100vw / 7 )
+                height: calc( 100vw / 7 / 1.777 )
                 box-sizing: border-box
             .slick-current
                 .small-slider__item
                     filter: blur(10px)
             &__item
-                width: calc( 100vw / 6 )
-                height: calc( 100vw / 6 / 1.777 )
+                width: calc( 100vw / 7 )
+                height: calc( 100vw / 7 / 1.777 )
                 background-position: center
                 background-size: cover
                 background-repeat: no-repeat

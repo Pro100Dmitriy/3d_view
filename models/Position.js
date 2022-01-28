@@ -7,6 +7,11 @@ const positionSchema = new Schema({
         required: true,
         unique: true
     },
+    color: {
+        type: String,
+        required: false,
+        default: ''
+    },
     name: {
         type: String,
         required: true
