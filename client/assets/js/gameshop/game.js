@@ -7,12 +7,11 @@ import { Controll } from './Controllers/Controll'
 
 import { pause } from './Modules/PauseModule'
 import { SETTINGS } from './settings'
-import { ServerManeger } from '../global/ServerManeger'
+import { SERVER } from '../global/ServerManeger'
 
 export class GameShop{
     constructor(container, settings = {}){
         this.container = container
-        this.server = new ServerManeger()
 
         // Modules
         this.pauseModule = pause()
@@ -149,7 +148,7 @@ export class GameShop{
             data: JSON.stringify(changes)
         }
 
-        this.server.post({ url: `/api/scene`, body: JSON.stringify(save),
+        SERVER.post({ url: `/api/scene`, body: JSON.stringify(save),
             onloadstart_callback(){
                  console.log('wait') 
             }
@@ -165,7 +164,7 @@ export class GameShop{
     
     async loadChanges(){
         let saveData
-        await this.server.get({ url: `/api/scene/public_world`,
+        await SERVER.get({ url: `/api/scene/public_world`,
             onloadstart_callback(){}
         })
         .then( response => {

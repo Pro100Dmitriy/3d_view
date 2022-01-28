@@ -1,5 +1,17 @@
+export function template( data ){
+    const title = data.name.replace( /(?<other>[\sа-яА-Я0-9a-zA-Z&]+)\[i\](?<title>\w+)\[-i\]/gu, ( ...match ) => {
+        let groups = match.pop()
+        return `${groups.other} <span>${groups.title}</span>`
+    } )
+    const price = data.cost
+    const sizes = data.sizes.match( /[a-zA-Z]+/gu )
+    const description = data.description.match( /[а-яА-Я\s.,:\w-]+/gu ).filter( paragraph => { if( paragraph !== 'br' ) return true } )
+    let part1 = description.slice( 0, description.length / 2 )
+    let part2 = description.slice( description.length / 2 )
+    const imageSrc = data.imageSrc.map( src => src.replace( '\\', '/' ) )
 
-const menuPage = `
+
+    return `
     <div id="single-PM-menu" class="page-module__menu">
         <div class="page-module__menu__map">
             <nav class="map">
@@ -13,10 +25,6 @@ const menuPage = `
         </div>
         <button id="close-PM" class="close-button el-close-button-dark">close</button>
     </div>
-`
-
-const page = `
-    ${menuPage}
     <section id="single-PM" class="single-page-module">
         <div class="relative">
             <div class="page-module">
@@ -24,19 +32,15 @@ const page = `
                 <div class="page-module__container">
                     <!-- Container -->
                     <div class="PMC__main-section">
-                        <div style="background-image: url('./models/01_Hoodie_Samurai.png');" class="PMC__main-section__image"></div>
+                        <div style="background-image: url('http://localhost:5000/${imageSrc[0]}');" class="PMC__main-section__image"></div>
                         <div class="PMC__main-section__text">
-                            <h1 class="h1-style">Худи самурай <span>adition</span></h1>
+                            <h1 class="h1-style">${ title }</h1>
                             <div class="PMC__main-section__text__details">
-                                <p class="semiBold-23 price">$16.00</p>
+                                <p class="semiBold-23 price">$${ price }.00</p>
                                 <div class="sizes">
                                     <p class="medium-14 sizes__title">Размеры:</p>
                                     <ul class="sizes__list">
-                                        <li class="sizes__list__item"><a href="#" class="medium-14">XS</a></li>
-                                        <li class="sizes__list__item"><a href="#" class="medium-14">S</a></li>
-                                        <li class="sizes__list__item"><a href="#" class="medium-14">M</a></li>
-                                        <li class="sizes__list__item"><a href="#" class="medium-14">L</a></li>
-                                        <li class="sizes__list__item"><a href="#" class="medium-14">XL</a></li>
+                                        ${ sizes.map( size => `<li class="sizes__list__item"><a href="#" class="medium-14">${ size }</a></li>` ).join('') }
                                     </ul>
                                 </div>
                                 <div class="buttons">
@@ -62,14 +66,10 @@ const page = `
                                     <div class="small-container">
                                         <div class="row">
                                             <div class="col">
-                                                <p class="regular-14"><span></span>Создание приверженного покупателя порождает контент. Один из признанных классиков маркетинга Ф.Котлер определяет это так: медийный канал слабо переворачивает эксклюзивный медиабизнес. Стратегическое планирование позиционирует социометрический повторный контакт, признавая определенные рыночные тенденции. Как отмечает Майкл Мескон, каждая сфера рынка стремительно экономит фирменный нишевый проект.</p>
-                                                <p class="regular-14"><span></span>Тем не менее, product placement охватывает ребрендинг. Опрос нетривиален. Экспертиза выполненного проекта, отбрасывая подробности, специфицирует повседневный традиционный канал, осознав маркетинг как часть производства. Оценка эффективности кампании неестественно стабилизирует план размещения. Ассортиментная политика предприятия переворачивает из ряда вон выходящий формирование имиджа.</p>
-                                                <p class="regular-14"><span></span>Потребительская культура по-прежнему востребована. В общем, SWOT-анализ индуктивно индуцирует институциональный целевой трафик. В общем, позиционирование на рынке экономит продукт.</p>
+                                                ${ part1.map( paragraph => `<p class="regular-14"><span></span>${ paragraph }</p>` ).join('') }
                                             </div>
                                             <div class="col">
-                                                <p class="regular-14"><span></span>Создание приверженного покупателя порождает контент. Один из признанных классиков маркетинга Ф.Котлер определяет это так: медийный канал слабо переворачивает эксклюзивный медиабизнес.</p>
-                                                <p class="regular-14"><span></span>Тем не менее, product placement охватывает ребрендинг. Опрос нетривиален. Экспертиза выполненного проекта, отбрасывая подробности, специфицирует повседневный традиционный канал, осознав маркетинг как часть производства.</p>
-                                                <p class="regular-14"><span></span>Потребительская культура по-прежнему востребована. В общем, SWOT-анализ индуктивно индуцирует институциональный целевой трафик. В общем, позиционирование на рынке экономит продукт.</p>
+                                                ${ part2.map( paragraph => `<p class="regular-14"><span></span>${ paragraph }</p>` ).join('') }
                                             </div>
                                         </div>
                                     </div>
@@ -83,25 +83,15 @@ const page = `
                             <div id="slick-carousel-big" class="big-slider">
                                 <!-- Big Slider -->
 
-                                <div class="big-slider__item" style="background-image: url('./models/01_Samurai_FRONT.png');"></div>
-                                <div class="big-slider__item" style="background-image: url('./models/01_Samurai.png');"></div>
-                                <div class="big-slider__item" style="background-image: url('./models/01_Hoodie_Samurai.png');"></div>
-                                <div class="big-slider__item" style="background-image: url('./models/01_Hoodie_Samurai.png');"></div>
-                                <div class="big-slider__item" style="background-image: url('./models/01_Samurai_BACK.png');"></div>
-                                <div class="big-slider__item" style="background-image: url('./models/01_Samurai_BACK.png');"></div>
+                                ${ imageSrc.map( image => `<div class="big-slider__item" style="background-image: url('http://localhost:5000/${ image }');"></div>` ).join() }
 
                                 <!-- Big Slider -->
                             </div>
                             <div id="slick-carousel-small" class="small-slider">
                                 <!-- Small Slider -->
 
-                                <div class="small-slider__item" style="background-image: url('./models/01_Samurai_FRONT.png');"></div>
-                                <div class="small-slider__item" style="background-image: url('./models/01_Samurai.png');"></div>
-                                <div class="small-slider__item" style="background-image: url('./models/01_Hoodie_Samurai.png');"></div>
-                                <div class="small-slider__item" style="background-image: url('./models/01_Hoodie_Samurai.png');"></div>
-                                <div class="small-slider__item" style="background-image: url('./models/01_Samurai_BACK.png');"></div>
-                                <div class="small-slider__item" style="background-image: url('./models/01_Samurai_BACK.png');"></div>
-
+                                ${ imageSrc.map( image => `<div class="small-slider__item" style="background-image: url('http://localhost:5000/${ image }');"></div>` ).join() }
+                                
                                 <!-- Small Slider -->
                             </div>
                         </div>
@@ -112,6 +102,4 @@ const page = `
         </div>
     </section>
 `
-
-
-export const readyHTML = page
+}

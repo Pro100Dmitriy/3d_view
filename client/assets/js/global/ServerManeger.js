@@ -41,3 +41,6 @@ export class ServerManeger{
 
     }
 }
+
+
+export const SERVER = new ServerManeger()

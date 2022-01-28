@@ -1,4 +1,3 @@
-const e = require('express')
 const Scene = require('../models/Scene')
 
 module.exports.save = async function( req, res ){

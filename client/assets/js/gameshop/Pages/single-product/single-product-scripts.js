@@ -19,7 +19,8 @@ export const pageScript = () => {
         asNavFor: '#slick-carousel-big',
         dots: false,
         arrows: false,
-        focusOnSelect: true
+        focusOnSelect: true,
+        infinite: false
     })
     
 }

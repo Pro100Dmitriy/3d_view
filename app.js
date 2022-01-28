@@ -10,6 +10,7 @@ mongoose.connect( keys.mongoURI )
     .then( () => console.log('MongoDB connected!') )
     .catch( error => console.log(error) )
 
+app.use('/uploads', express.static('uploads'))
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
 
