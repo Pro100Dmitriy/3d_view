@@ -82,14 +82,14 @@ export function template( data ){
                             <div id="slick-carousel-big" class="big-slider">
                                 <!-- Big Slider -->
 
-                                ${ imageSrc.map( image => `<div class="big-slider__item" style="background-image: url('${href}${imageSrc[0]}');"></div>` ).join() }
+                                ${ imageSrc.map( image => `<div class="big-slider__item" style="background-image: url('${href}${image}');"></div>` ).join() }
 
                                 <!-- Big Slider -->
                             </div>
                             <div id="slick-carousel-small" class="small-slider">
                                 <!-- Small Slider -->
 
-                                ${ imageSrc.map( image => `<div class="small-slider__item" style="background-image: url('${href}${imageSrc[0]}');"></div>` ).join() }
+                                ${ imageSrc.map( image => `<div class="small-slider__item" style="background-image: url('${href}${image}');"></div>` ).join() }
                                 
                                 <!-- Small Slider -->
                             </div>

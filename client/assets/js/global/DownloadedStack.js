@@ -12,10 +12,7 @@ class DownloadStack{
                 if( item ) i += 1
             }
             if( i >= 7 ) this.openButton.removeAttribute( 'disabled' )
-            console.log( i )
-            console.log( this.stack )
         }
-        console.log( this.stack )
 
         if( !this.stack.has( name ) ){
             this.stack.set( name, false )
