@@ -139,6 +139,39 @@ export class FBX{
             },
             xhr => {
                 console.log( (xhr.loaded / xhr.total) * 100 + '%  loaded' )
+                const name = this.name.replace( '&', '' )
+                const progressItem = document.querySelector(`#${ name }`) ?? false
+
+                if( progressItem ){
+                    const percent = Math.round( (xhr.loaded / xhr.total) * 100 )
+
+                    console.log( typeof percent )
+                    if( percent == '100' ){
+                        progressItem.style.opacity = 0
+                        setTimeout( () => progressItem.style.display = 'none', 300 )
+                    }else{
+                        progressItem.querySelector('.percent').innerHTML = percent
+                        progressItem.querySelector('.progress-line').style.width = `${ percent }%`
+                    }
+                }else{
+                    const downloadList = document.querySelector('#download-list')
+                    const percent = Math.round( (xhr.loaded / xhr.total) * 100 )
+    
+                    const HTML = `
+                        <li id="${ name }" class="download__list__item">
+                            <p class="name medium-14">${ name }</p>
+                            <p class="percent regular-14">${ percent }%</p>
+                            <div class="progress-line"><span style="width: ${ percent }%"></span></div>
+                        </li>
+                    `
+                    downloadList.insertAdjacentHTML( 'beforeend', HTML )
+
+                    if( percent == 100 ){
+                        let progressItem = document.querySelector(`#${ name }`) ?? false
+                        progressItem.style.opacity = 0
+                        setTimeout( () => progressItem.style.display = 'none', 300 )
+                    }
+                }
             },
             error => {
                 console.log(error)

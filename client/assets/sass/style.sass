@@ -21,6 +21,40 @@ body
     background-repeat: no-repeat
     background-size: cover
     position: relative
+    .download
+        position: absolute
+        top: 20px
+        left: 20px
+        &__list
+            &__item
+                background: $black
+                color: white
+                margin-bottom: 0.5rem
+                padding: 0.4rem
+                display: flex
+                align-items: center
+                transition: all 0.2s ease
+                .name
+                    margin-right: 1rem
+                    width: 100px
+                    overflow: hidden
+                .percent
+                    margin-right: 1rem
+                    transition: all 0.2s ease
+                .progress-line
+                    height: 4px
+                    width: 150px
+                    background: $gray
+                    position: relative
+                    transition: all 0.2s ease
+                    span
+                        position: absolute
+                        top: 0
+                        left: 0
+                        height: 4px
+                        width: 50%
+                        background: green
+                        transition: all 0.2s ease
     .overlay
         content: ''
         background: rgba( 0, 0, 0, 0)
@@ -37,6 +71,7 @@ body
         left: 50%
         transform: translateX(-50%)
         z-index: 2
+
 
 
 .game

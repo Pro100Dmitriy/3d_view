@@ -3,7 +3,7 @@ const path = require('path')
 
 
 module.exports = {
-    mode: 'production', // development - production
+    mode: 'development', // development - production
     devtool: 'inline-source-map',
     entry : {
         app: './assets/js/app'
