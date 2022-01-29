@@ -9,7 +9,7 @@ export function template( data ){
     let part1 = description.slice( 0, description.length / 2 )
     let part2 = description.slice( description.length / 2 )
     const imageSrc = data.imageSrc.map( src => src.replace( '\\', '/' ) )
-
+    const href = window.location.href
 
     return `
     <div id="single-PM-menu" class="page-module__menu" style="border-bottom: 1px solid ${data.color};">
@@ -31,7 +31,7 @@ export function template( data ){
                 <div class="page-module__container">
                     <!-- Container -->
                     <div class="PMC__main-section">
-                        <div style="background-image: url('http://localhost:5000/${imageSrc[0]}');" class="PMC__main-section__image"></div>
+                        <div style="background-image: url('${href}${imageSrc[0]}');" class="PMC__main-section__image"></div>
                         <div class="PMC__main-section__text">
                             <h1 class="h1-style">${ title }</h1>
                             <div class="PMC__main-section__text__details">
@@ -82,14 +82,14 @@ export function template( data ){
                             <div id="slick-carousel-big" class="big-slider">
                                 <!-- Big Slider -->
 
-                                ${ imageSrc.map( image => `<div class="big-slider__item" style="background-image: url('http://localhost:5000/${ image }');"></div>` ).join() }
+                                ${ imageSrc.map( image => `<div class="big-slider__item" style="background-image: url('${href}${imageSrc[0]}');"></div>` ).join() }
 
                                 <!-- Big Slider -->
                             </div>
                             <div id="slick-carousel-small" class="small-slider">
                                 <!-- Small Slider -->
 
-                                ${ imageSrc.map( image => `<div class="small-slider__item" style="background-image: url('http://localhost:5000/${ image }');"></div>` ).join() }
+                                ${ imageSrc.map( image => `<div class="small-slider__item" style="background-image: url('${href}${imageSrc[0]}');"></div>` ).join() }
                                 
                                 <!-- Small Slider -->
                             </div>

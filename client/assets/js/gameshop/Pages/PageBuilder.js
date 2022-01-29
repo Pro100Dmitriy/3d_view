@@ -67,10 +67,11 @@ export class PageBuilder{
                 } )
                 const price = saveData.cost
                 const imageSrc = saveData.imageSrc.map( src => src.replace( '\\', '/' ) )
+                const href = window.location.href
 
                 this.previewWindow.innerHTML = `
                     <div class="view-info__container">
-                        <div style="background-image: url('http://localhost:5000/${ imageSrc[0] }')" class="image"></div>
+                        <div style="background-image: url('${href}${imageSrc[0]}')" class="image"></div>
                         <div class="text">
                             <h3 class="medium-14">${ title }</h3>
                             <div class="price regular-14">Цена: $${ price }.00</div>
