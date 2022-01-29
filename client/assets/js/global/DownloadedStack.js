@@ -1,26 +1,20 @@
 class DownloadStack{
     constructor(){
         this.stackHTML = document.querySelector('#download-list')
-        this.stack = new Set()
+        this.openButton = document.querySelector('#open_gameshop')
+        this.stack = new Map()
     }
 
     add( name, percent ){
-        console.log( this.stack )
+        if( this.stack.size >= 7 ){
+            this.openButton.removeAttribute( 'disabled' )
+        }
+
         if( !this.stack.has( name ) ){
-            if( percent == 100 ){
-                //this.createTemplate( name, percent  )
-                //this.deleteTemplate( name, percent )
-            }else{
-                this.stack.add( name )
-                this.createTemplate( name, percent  )
-            }
+            this.stack.set( name, false )
+            this.createTemplate( name, percent  )
         }else{
-            if( percent == 100 ){
-                this.stack.delete( name )
-                this.deleteTemplate( name, percent )
-            }else{
-                this.updateTemplate( name, percent )
-            }
+            this.updateTemplate( name, percent )
         }
     }
 
@@ -33,6 +27,11 @@ class DownloadStack{
             </li>
         `
         this.stackHTML.insertAdjacentHTML( 'beforeend', HTML )
+
+        if( percent == 100 ){
+            this.stack.set( name, true )
+            this.deleteTemplate( name )
+        }
     }
 
     updateTemplate( name, percent ){
@@ -41,9 +40,14 @@ class DownloadStack{
             progressItem.querySelector('.percent').innerHTML = percent
             progressItem.querySelector('.progress-line span').style.width = `${ percent }%`
         }
+
+        if( percent == 100 ){
+            this.stack.set( name, true )
+            this.deleteTemplate( name )
+        }
     }
 
-    deleteTemplate( name, percent ){
+    deleteTemplate( name ){
         const progressItem = document.querySelector(`#${ name }`) ?? false
         if( progressItem ){
             setTimeout( () => progressItem.style.opacity = 0, 300 )
