@@ -1,3 +1,4 @@
 node_modules
 ./client/node_modules
 .cache
+config/keys.dev.js

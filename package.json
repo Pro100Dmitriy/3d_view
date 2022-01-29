@@ -3,9 +3,14 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": "16.13.2",
+    "npm": "8.1.2"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index",
+    "client-install": "npm install --prefix client",
     "client": "npm run start --prefix client",
     "server": "nodemon index",
     "dev": "concurrently \"npm run server\" \"npm run client\""
