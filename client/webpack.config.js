@@ -1,23 +1,32 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const path = require('path')
 
+const MODE = 'production' // production - development
+
+let outputpath
+if( MODE === 'development' ){
+    outputpath = path.resolve(__dirname, 'dist/dev')
+}else{
+    outputpath = path.resolve(__dirname, 'dist/prod')
+}
+
 
 module.exports = {
-    mode: 'development',
+    mode: MODE,
     devtool: 'inline-source-map',
     entry : {
         app: './assets/js/app'
     },
     output: {
         filename: '[name].js',
-        path: path.resolve(__dirname, 'dist')
+        path: outputpath
     },
     devServer: {
         hot: true,
-        static: './dist/',
+        static: './dist/dev',
         liveReload: true,
         port: '1234',
-        watchFiles: ['assets/**/*'],
+        watchFiles: ['./**/*'],
         proxy: {
             '/api': {
                 target: 'http://localhost:5000',

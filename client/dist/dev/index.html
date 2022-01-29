@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D View</title>
+<script defer src="app.js"></script></head>
+<body>
+
+
+    <section class="start">
+        <button id="open_gameshop" class="gameopen el-stroke-button-white">Войти в магазин</button>
+        <div class="overlay"></div>
+    </section>
+
+    <section id="game-section" class="game">
+        <div class="game__block">
+            <div class="edit-UI">
+                <div id="view-info" class="view-info "></div>
+            </div>
+            <div class="game-UI">
+                <span class="snap"></span>
+            </div>
+            <div class="pauseModule">
+                <div class="pauseModule__content">
+                    <h2 class="h2-style">Кликните чтобы играть</h2>
+                    <p class="medium-14">W,A,S,D = Ходить, SPACE = Прыгать, MOUSE = Осматриваться</p>
+                </div>
+            </div>
+            <div id="gameshop"></div>
+        </div>
+    </section>
+
+    <app-root></app-root>
+
+</body>
+</html>
