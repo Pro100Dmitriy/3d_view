@@ -5,7 +5,6 @@ import { SpotLight } from './LightsClass/SpotLight'
 import { Cube } from "./MeshesClass/Cube"
 import { FBX } from "./MeshesClass/FBX"
 
-
 export const MeshByScene = [
     // BORDERS
     new Cube({
@@ -53,26 +52,26 @@ export const MeshByScene = [
         mass: 0,
         picked: false
     }),
-    // new FBX({
-    //     name: 'Sale_Cube',
-    //     file: './models/Sale_Cube.fbx',
-    //     boundingShape: './models/Sale_Cube.fbx',
-    //     position: {x: -13.192049288245203, y: 11.200921267992209, z: -28.395558263602183},
-    //     rotation: {x: -3.1415, y: 1.2890857097316215, z: -3.1415},
-    //     scale: {x: 1.398, y: 1.398, z: 1.398},
-    //     size: .05,
-    //     material: new THREE.MeshStandardMaterial(),
-    //     textures: {
-    //         baseColorMap: new THREE.TextureLoader().load("./models/Sale_Cube_Sale_Cube_BaseColor.png"),
-    //         roughnessMap: new THREE.TextureLoader().load("./models/Sale_Cube_Sale_Cube_Roughness.png"),
-    //         metalnessMap: new THREE.TextureLoader().load("./models/Sale_Cube_Sale_Cube_Metallic.png"),
-    //         normalMap: new THREE.TextureLoader().load("./models/Sale_Cube_Sale_Cube_Normal.png"),
-    //     },
-    //     mass: 0,
-    //     picked: true,
-    //     productID: false,
-    //     isHover: true
-    // }),
+    new FBX({
+        name: 'Sale_Cube',
+        file: './models/Sale_Cube.fbx',
+        boundingShape: './models/Sale_Cube.fbx',
+        position: {x: -13.192049288245203, y: 11.200921267992209, z: -28.395558263602183},
+        rotation: {x: -3.1415, y: 1.2890857097316215, z: -3.1415},
+        scale: {x: 1.398, y: 1.398, z: 1.398},
+        size: .05,
+        material: new THREE.MeshStandardMaterial(),
+        textures: {
+            baseColorMap: new THREE.TextureLoader().load("./models/Sale_Cube_Sale_Cube_BaseColor.png"),
+            roughnessMap: new THREE.TextureLoader().load("./models/Sale_Cube_Sale_Cube_Roughness.png"),
+            metalnessMap: new THREE.TextureLoader().load("./models/Sale_Cube_Sale_Cube_Metallic.png"),
+            normalMap: new THREE.TextureLoader().load("./models/Sale_Cube_Sale_Cube_Normal.png"),
+        },
+        mass: 0,
+        picked: true,
+        productID: false,
+        isHover: true
+    }),
     new Cube({
         name: 'Border_07',
         position:  {x: -40.170279, y: 13.1658649, z: -13.940256},
@@ -273,25 +272,25 @@ export const MeshByScene = [
     }),
     // BORDERS
     // FBX
-    // new FBX({
-    //     name: 'Hoodie_Space',
-    //     file: '../../models/01_Substace_Painter_Space.fbx',
-    //     position: {x: 5, y: 5.8534, z: 9.660},
-    //     rotation: {x: 0, y: 0, z: 0},
-    //     scale: {x: 1, y: 1, z: 1},
-    //     size: .05,
-    //     material: new THREE.MeshStandardMaterial(),
-    //     textures: {
-    //         baseColorMap: new THREE.TextureLoader().load("./models/02_Hoodie_Low_model_Hoodie_standart_BaseColor.png"),
-    //         roughnessMap: new THREE.TextureLoader().load("./models/02_Hoodie_Low_model_Hoodie_standart_Roughness.png"),
-    //         metalnessMap: new THREE.TextureLoader().load("./models/02_Hoodie_Low_model_Hoodie_standart_Metallic.png"),
-    //         normalMap: new THREE.TextureLoader().load("./models/02_Hoodie_Low_model_Hoodie_standart_Normal.png"),
-    //     },
-    //     mass: 0,
-    //     picked: false,
-    //     productID: 1,
-    //     isHover: true
-    // }),
+    new FBX({
+        name: 'Hoodie_Space',
+        file: '../../models/01_Substace_Painter_Space.fbx',
+        position: {x: 5, y: 5.8534, z: 9.660},
+        rotation: {x: 0, y: 0, z: 0},
+        scale: {x: 1, y: 1, z: 1},
+        size: .05,
+        material: new THREE.MeshStandardMaterial(),
+        textures: {
+            baseColorMap: new THREE.TextureLoader().load("./models/02_Hoodie_Low_model_Hoodie_standart_BaseColor.png"),
+            roughnessMap: new THREE.TextureLoader().load("./models/02_Hoodie_Low_model_Hoodie_standart_Roughness.png"),
+            metalnessMap: new THREE.TextureLoader().load("./models/02_Hoodie_Low_model_Hoodie_standart_Metallic.png"),
+            normalMap: new THREE.TextureLoader().load("./models/02_Hoodie_Low_model_Hoodie_standart_Normal.png"),
+        },
+        mass: 0,
+        picked: false,
+        productID: 1,
+        isHover: true
+    }),
     new Cube({
         name: 'Hoodie_Space_Table',
         position:  {x: 4.939, y: -0.564, z: 7.5678},
@@ -301,26 +300,26 @@ export const MeshByScene = [
         mass: 0,
         picked: false
     }),
-    // new FBX({
-    //     name: 'Hoodie_Samurai',
-    //     file: './models/01_Hoodie-Samurai.fbx',
-    //     boundingShape: false,
-    //     position: {x: 22.47639, y: 5.9922, z: 9.9419},
-    //     rotation: {x: 0, y: -0.45619, z: 0},
-    //     scale: {x: 1, y: 1, z: 1},
-    //     size: .05,
-    //     material: new THREE.MeshStandardMaterial(),
-    //     textures: {
-    //         baseColorMap: new THREE.TextureLoader().load("./models/01_Hoodie-Samurai__Low_Hoodie-Samurai_BaseColor.png"),
-    //         roughnessMap: new THREE.TextureLoader().load("./models/01_Hoodie-Samurai__Low_Hoodie-Samurai_Roughness.png"),
-    //         metalnessMap: new THREE.TextureLoader().load("./models/01_Hoodie-Samurai__Low_Hoodie-Samurai_Metallic.png"),
-    //         normalMap: new THREE.TextureLoader().load("./models/01_Hoodie-Samurai__Low_Hoodie-Samurai_Normal.png"),
-    //     },
-    //     mass: 1,
-    //     picked: false,
-    //     productID: 2,
-    //     isHover: true
-    // }),
+    new FBX({
+        name: 'Hoodie_Samurai',
+        file: './models/01_Hoodie-Samurai.fbx',
+        boundingShape: false,
+        position: {x: 22.47639, y: 5.9922, z: 9.9419},
+        rotation: {x: 0, y: -0.45619, z: 0},
+        scale: {x: 1, y: 1, z: 1},
+        size: .05,
+        material: new THREE.MeshStandardMaterial(),
+        textures: {
+            baseColorMap: new THREE.TextureLoader().load("./models/01_Hoodie-Samurai__Low_Hoodie-Samurai_BaseColor.png"),
+            roughnessMap: new THREE.TextureLoader().load("./models/01_Hoodie-Samurai__Low_Hoodie-Samurai_Roughness.png"),
+            metalnessMap: new THREE.TextureLoader().load("./models/01_Hoodie-Samurai__Low_Hoodie-Samurai_Metallic.png"),
+            normalMap: new THREE.TextureLoader().load("./models/01_Hoodie-Samurai__Low_Hoodie-Samurai_Normal.png"),
+        },
+        mass: 1,
+        picked: false,
+        productID: 2,
+        isHover: true
+    }),
     new Cube({
         name: 'Hoodie_Samurai_Table',
         position: {x: 22.550, y: -0.564, z: 9.3305},
@@ -330,26 +329,26 @@ export const MeshByScene = [
         mass: 0,
         picked: false
     }),
-    // new FBX({
-    //     name: 'Hoodie_Black&White',
-    //     file: './models/01_Hoodie_Black&White.fbx',
-    //     boundingShape: false,
-    //     position: {x: -13.2279, y: 5.9223, z: 7.8961},
-    //     rotation: {x: 0, y: 0.6867, z: 0},
-    //     scale: {x: 1, y: 1, z: 1},
-    //     size: .05,
-    //     material: new THREE.MeshStandardMaterial(),
-    //     textures: {
-    //         baseColorMap: new THREE.TextureLoader().load("./models/01_Hoodie_Black&White__Low_Hoodie_Black&White_BaseColor.png"),
-    //         roughnessMap: new THREE.TextureLoader().load("./models/01_Hoodie_Black&White__Low_Hoodie_Black&White_Roughness.png"),
-    //         metalnessMap: new THREE.TextureLoader().load("./models/01_Hoodie_Black&White__Low_Hoodie_Black&White_Metallic.png"),
-    //         normalMap: new THREE.TextureLoader().load("./models/01_Hoodie_Black&White__Low_Hoodie_Black&White_Normal.png"),
-    //     },
-    //     mass: 0,
-    //     picked: false,
-    //     productID: 3,
-    //     isHover: true
-    // }),
+    new FBX({
+        name: 'Hoodie_Black&White',
+        file: './models/01_Hoodie_Black&White.fbx',
+        boundingShape: false,
+        position: {x: -13.2279, y: 5.9223, z: 7.8961},
+        rotation: {x: 0, y: 0.6867, z: 0},
+        scale: {x: 1, y: 1, z: 1},
+        size: .05,
+        material: new THREE.MeshStandardMaterial(),
+        textures: {
+            baseColorMap: new THREE.TextureLoader().load("./models/01_Hoodie_Black&White__Low_Hoodie_Black&White_BaseColor.png"),
+            roughnessMap: new THREE.TextureLoader().load("./models/01_Hoodie_Black&White__Low_Hoodie_Black&White_Roughness.png"),
+            metalnessMap: new THREE.TextureLoader().load("./models/01_Hoodie_Black&White__Low_Hoodie_Black&White_Metallic.png"),
+            normalMap: new THREE.TextureLoader().load("./models/01_Hoodie_Black&White__Low_Hoodie_Black&White_Normal.png"),
+        },
+        mass: 0,
+        picked: false,
+        productID: 3,
+        isHover: true
+    }),
     new Cube({
         name: 'Hoodie_Black&White_Table',
         position: {x: -14.026, y: -0.564, z: 6.415},
@@ -407,50 +406,50 @@ export const MeshByScene = [
         picked: false
     }),
     // SMALL CUBE
-    // new FBX({
-    //     name: 'Clock',
-    //     file: './models/Clock.fbx',
-    //     boundingShape: './models/Clock_Bounding.fbx',
-    //     position: {x: 35.2882, y: 39.7019578, z: 15.1447545},
-    //     rotation: {x: 2.0096268, y: 0.57480235, z: 0.938330880},
-    //     scale: {x: 1, y: 1, z: 1},
-    //     size: .1745, //.05
-    //     material: new THREE.MeshStandardMaterial(),
-    //     textures: false,
-    //     mass: 0,
-    //     picked: false,
-    //     isHover: true
-    // }),
-    // new FBX({
-    //     name: 'Sandglass',
-    //     file: './models/Sandglass.fbx',
-    //     boundingShape: './models/Sandglass_Bounding.fbx',
-    //     position: {x: -27.46261, y: 42.9158, z: 52.02382},
-    //     rotation: {x: -0.6851, y: -0.01336, z: -0.40890},
-    //     scale: {x: 1, y: 1, z: 1},
-    //     size: .11, //.05
-    //     material: new THREE.MeshStandardMaterial(),
-    //     textures: false,
-    //     mass: 0,
-    //     picked: false,
-    //     isHover: false
-    // }),
-    // new FBX({
-    //     name: 'iPhone',
-    //     file: './models/iPhone__Low.fbx',
-    //     boundingShape: false,
-    //     position: {x: -26.95556, y: 39.062979, z: 17.844459},
-    //     rotation: {x: 1.275338, y: 0.638142588, z: -1.1864217},
-    //     scale: {x: 1, y: 1, z: 1},
-    //     size: .33, //.05
-    //     material: new THREE.MeshStandardMaterial(),
-    //     textures: {
-    //         baseColorMap: new THREE.TextureLoader().load("./models/iPhone__Low_lambert1_BaseColor.png")
-    //     },
-    //     mass: 0,
-    //     picked: false,
-    //     isHover: false
-    // }),
+    new FBX({
+        name: 'Clock',
+        file: './models/Clock.fbx',
+        boundingShape: './models/Clock_Bounding.fbx',
+        position: {x: 35.2882, y: 39.7019578, z: 15.1447545},
+        rotation: {x: 2.0096268, y: 0.57480235, z: 0.938330880},
+        scale: {x: 1, y: 1, z: 1},
+        size: .1745, //.05
+        material: new THREE.MeshStandardMaterial(),
+        textures: false,
+        mass: 0,
+        picked: false,
+        isHover: true
+    }),
+    new FBX({
+        name: 'Sandglass',
+        file: './models/Sandglass.fbx',
+        boundingShape: './models/Sandglass_Bounding.fbx',
+        position: {x: -27.46261, y: 42.9158, z: 52.02382},
+        rotation: {x: -0.6851, y: -0.01336, z: -0.40890},
+        scale: {x: 1, y: 1, z: 1},
+        size: .11, //.05
+        material: new THREE.MeshStandardMaterial(),
+        textures: false,
+        mass: 0,
+        picked: false,
+        isHover: false
+    }),
+    new FBX({
+        name: 'iPhone',
+        file: './models/iPhone__Low.fbx',
+        boundingShape: false,
+        position: {x: -26.95556, y: 39.062979, z: 17.844459},
+        rotation: {x: 1.275338, y: 0.638142588, z: -1.1864217},
+        scale: {x: 1, y: 1, z: 1},
+        size: .33, //.05
+        material: new THREE.MeshStandardMaterial(),
+        textures: {
+            baseColorMap: new THREE.TextureLoader().load("./models/iPhone__Low_lambert1_BaseColor.png")
+        },
+        mass: 0,
+        picked: false,
+        isHover: false
+    }),
 ]
 
 
