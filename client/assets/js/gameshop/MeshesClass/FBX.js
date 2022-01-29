@@ -147,11 +147,11 @@ export class FBX{
 
                     console.log( typeof percent )
                     if( percent == '100' ){
-                        progressItem.style.opacity = 0
-                        setTimeout( () => progressItem.style.display = 'none', 300 )
+                        setTimeout( () => progressItem.style.opacity = 0, 300 )
+                        setTimeout( () => progressItem.remove(), 5000 )
                     }else{
                         progressItem.querySelector('.percent').innerHTML = percent
-                        progressItem.querySelector('.progress-line').style.width = `${ percent }%`
+                        progressItem.querySelector('.progress-line span').style.width = `${ percent }%`
                     }
                 }else{
                     const downloadList = document.querySelector('#download-list')
@@ -168,8 +168,8 @@ export class FBX{
 
                     if( percent == 100 ){
                         let progressItem = document.querySelector(`#${ name }`) ?? false
-                        progressItem.style.opacity = 0
-                        setTimeout( () => progressItem.style.display = 'none', 300 )
+                        setTimeout( () => progressItem.style.opacity = 0, 300 )
+                        setTimeout( () => progressItem.remove(), 5000 )
                     }
                 }
             },
