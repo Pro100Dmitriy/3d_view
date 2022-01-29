@@ -19,23 +19,27 @@ export class PageBuilder{
     }
 
     sendReguest( selectedProdID ){
-        SERVER.get({ url: `/api/position/${selectedProdID}`,
-            onloadstart_callback(){
-                console.log('Work')
-            }
-        })
-        .then( response => {
-            const saveData = response[0] ? response[0] : false
-            if( saveData !== false ){
-                const HTML = template( saveData )
-                this.build( HTML )
-                //Open
-                this.page.style.display = 'block'
-                setTimeout( () => this.page.classList.add( 'PM-open' ), 100 )
-                setTimeout( () => this.pageMenu.classList.add( 'PM__menu-open' ), 100 )
-            }
-        } )
-        .catch( error => new Error( `Send request id failed ${error}` ) )
+        const buildHTML = data => {
+            const HTML = template( data )
+            this.build( HTML )
+            //Open
+            this.page.style.display = 'block'
+            setTimeout( () => this.page.classList.add( 'PM-open' ), 100 )
+            setTimeout( () => this.pageMenu.classList.add( 'PM__menu-open' ), 100 )
+        }
+
+        if( this.savedData !== false && this.savedData.productId == selectedProdID ){
+            buildHTML( this.savedData )
+        }else{
+            SERVER.get({ url: `/api/position/${selectedProdID}`,
+                onloadstart_callback(){}
+            })
+            .then( response => {
+                const saveData = response[0] ? response[0] : false
+                if( saveData !== false ) buildHTML( saveData )
+            } )
+            .catch( error => new Error( `Send request id failed ${error}` ) )
+        }
     }
 
     open( selectedProdID ){
@@ -54,20 +58,20 @@ export class PageBuilder{
         if( selectedProdID === this.selectedID ) return
         this.selectedID = selectedProdID
         SERVER.get({ url: `/api/position/${selectedProdID}`,
-            onloadstart_callback(){
-                
-            }
+            onloadstart_callback(){}
         })
         .then( response => {
             const saveData = response[0] ? response[0] : false
             if( saveData !== false ){
+                this.savedData = saveData
+
                 const title = saveData.name.replace( /(?<other>[\sа-яА-Я0-9a-zA-Z&<br>]+)\[i\](?<title>\w+)\[-i\]/gu, ( ...match ) => {
                     let groups = match.pop()
                     return `${groups.other.replace(/<br>/gu, ' ')}${groups.title.replace('<br>', ' ')}`
                 } )
                 const price = saveData.cost
                 const imageSrc = saveData.imageSrc.map( src => src.replace( '\\', '/' ) )
-                const href = window.location.href
+                const href = window.location.href //window.location.href
 
                 this.previewWindow.innerHTML = `
                     <div class="view-info__container">
