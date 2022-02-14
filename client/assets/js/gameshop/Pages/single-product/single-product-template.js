@@ -9,7 +9,7 @@ export function template( data ){
     let part1 = description.slice( 0, description.length / 2 )
     let part2 = description.slice( description.length / 2 )
     const imageSrc = data.imageSrc.map( src => src.replace( '\\', '/' ) )
-    const href = window.location.href //window.location.href http://localhost:5000/
+    const href = 'http://localhost:5000/' //window.location.href http://localhost:5000/
 
     return `
     <div id="single-PM-menu" class="page-module__menu" style="border-bottom: 1px solid ${data.color};">

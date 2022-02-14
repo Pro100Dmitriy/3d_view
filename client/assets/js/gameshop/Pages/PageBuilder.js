@@ -71,7 +71,7 @@ export class PageBuilder{
                 } )
                 const price = saveData.cost
                 const imageSrc = saveData.imageSrc.map( src => src.replace( '\\', '/' ) )
-                const href = window.location.href //window.location.href http://localhost:5000/
+                const href = 'http://localhost:5000/' //window.location.href http://localhost:5000/
 
                 this.previewWindow.innerHTML = `
                     <div class="view-info__container">
